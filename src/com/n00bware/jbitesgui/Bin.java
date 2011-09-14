@@ -133,11 +133,10 @@ public final class Bin {
         }
     }
 
-    public static boolean updateShowBuild() {
+    public static void updateShowBuild() {
         Log.d(TAG, "Setting up /system/tmp/showbuild");
         Bin.runRootCommand("cp /system/build.prop " + SHOWBUILD_PATH);
         Bin.runRootCommand("chmod 777 " + SHOWBUILD_PATH);
-        return true;
     }
 
     public static void keepModule(String keep) {
