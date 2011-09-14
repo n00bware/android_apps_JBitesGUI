@@ -127,13 +127,15 @@ public class MainActivity extends PreferenceActivity implements
             if (pref == mMountPref) {
                 return Bin.mount(newValue.toString());
             } else if (pref == mSysctlPref) {
-                return Bin.modScripts("99sysctl", newValue.toString());
+                Bin.modScripts("sysctl.conf", newValue.toString());
+                return Bin.modScripts("init.d/99sysctl", newValue.toString());
             } else if (pref == mCronPref) {
+                //Bin.runRootCommand("echo \"root:x:0:0::data/cron:/system/xbin/bash\" > /system/etc/passwd");
                 return Bin.modScripts("99cron", newValue.toString());
             } else if (pref == mInitPref) {
                 return Bin.modScripts("99init", newValue.toString());
             } else if (pref == mOCPref) {
-                return Bin.modOC(newValue.toString());
+                return Bin.modScripts("99oc", newValue.toString());
             }
         }
         return false;
