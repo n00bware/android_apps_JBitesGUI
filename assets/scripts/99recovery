@@ -1,0 +1,10 @@
+#!/system/bin/sh
+
+# Variables
+doRecovery=0
+
+# Recovery at boot
+busybox mount -o remount,rw /system
+if [ $doRecovery -eq 1 ]; then
+busybox echo 1 > /data/.recovery_mode; sync;
+fi
