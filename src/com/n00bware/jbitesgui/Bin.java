@@ -140,7 +140,7 @@ public final class Bin {
     }
 
     public static void keepModule(String keep) {
-        Log.d(TAG, String.format("Keep overclocking modules=%s"));
+        Log.d(TAG, String.format("Keep overclocking modules=%s", keep));
         File oc = new File("/system/lib/modules/overclock.ko");
         File gov = new File("/system/lib/modules/cpufreq_interactive.ko");
         boolean oc_exist = oc.exists();
