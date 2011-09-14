@@ -93,20 +93,6 @@ public class MainActivity extends PreferenceActivity implements
             }
         }
 
-        /*Install scripts
-        File scripts = new File(SCRIPTS_PATH);
-        boolean checkScripts = checkScripts.exists();
-        if (!checkScritps) {
-            try {
-                Log.d(TAG, String.format("script not found @ '%s'", SCRIPTS_PATH));
-                Bin.remountRW();
-                Bin.installScripts();
-            } finally {
-                Bin.remountRO();
-            }
-        } */
-
-
         // Declare open
         mAlertDialog = new AlertDialog.Builder(this).create();
         mAlertDialog.setTitle(R.string.open_title);
@@ -124,19 +110,19 @@ public class MainActivity extends PreferenceActivity implements
     public boolean onPreferenceChange(Preference pref, Object newValue) {
         if (newValue != null) {
             Log.e(TAG, "New preference selected: " + newValue);
+            Bin.mount("rw");
             if (pref == mMountPref) {
                 return Bin.mount(newValue.toString());
             } else if (pref == mSysctlPref) {
-                Bin.modScripts("sysctl.conf", newValue.toString());
-                return Bin.modScripts("init.d/99sysctl", newValue.toString());
+                return Bin.modScripts("sysctl", newValue.toString());
             } else if (pref == mCronPref) {
-                //Bin.runRootCommand("echo \"root:x:0:0::data/cron:/system/xbin/bash\" > /system/etc/passwd");
-                return Bin.modScripts("99cron", newValue.toString());
+                return Bin.modScripts("cron", newValue.toString());
             } else if (pref == mInitPref) {
-                return Bin.modScripts("99init", newValue.toString());
+                return Bin.modScripts("init", newValue.toString());
             } else if (pref == mOCPref) {
-                return Bin.modScripts("99oc", newValue.toString());
+                return Bin.modScripts("oc", newValue.toString());
             }
+            Bin.mount("ro");
         }
         return false;
     }
