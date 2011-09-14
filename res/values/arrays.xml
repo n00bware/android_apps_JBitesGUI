@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="entries_mount">
+        <item>ro</item>
+        <item>rw</item>
+    </string-array>
+
+    <string-array name="entries_mount_explain">
+        <item>Mount /system as Read Only</item>
+        <item>Mount /system as Read and Write</item>
+    </string-array>
+
+    <string-array name="entries_sysctl">
+        <item>enable</item>
+        <item>disable</item>
+    </string-array>
+
+    <string-array name="entries_sysctl_explain">
+        <item>Install sysctl script to init.d</item>
+        <item>Remove sysctl script</item>
+    </string-array>
+
+    <string-array name="entries_cron">
+        <item>enable</item>
+        <item>disable</item>
+    </string-array>
+
+    <string-array name="entries_cron_explain">
+        <item>Install cron script to init.d</item>
+        <item>Remove cron script</item>
+    </string-array>
+
+    <string-array name="entries_init">
+        <item>enable</item>
+        <item>disable</item>
+    </string-array>
+
+    <string-array name="entries_init_explain">
+        <item>Enable init.d support</item>
+        <item>Disable init.d support</item>
+    </string-array>
+
+    <string-array name="entries_oc">
+        <item>1ghz</item>
+        <item>11ghz</item>
+        <item>12ghz</item>
+        <item>125ghz</item>
+        <item>13ghz</item>
+        <item>disableOC</item>
+    </string-array>
+
+    <string-array name="entries_oc_explain">
+        <item>Undervolt 1.0 GHZ</item>
+        <item>Overclock/Undervolt 1.1 GHZ</item>
+        <item>Overclock/Undervolt 1.2 GHZ</item>
+        <item>Overclock/Undervolt 1.25 GHZ</item>
+        <item>Overclock/Undervolt 1.3 GHZ</item>
+        <item>Disable all Overclock/Undervolting</item>
+    </string-array>
+
+</resources>

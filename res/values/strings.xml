@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <!-- JBitesGUI app strings -->
+    <string name="app_name">JBitesGUI</string>
+    <string name="general_title">JBitesGUI v1</string>
+    <string name="main_title_head">JBitesGUI by n00bware</string>
+
+    <!-- ShowBuildProp.java strings -->
+    <string name="showbuild_title">Do you know what is in your build.prop</string>
+    <string name="showbuild_dialog">This is your /system/build.prop</string>
+    <string name="showbuild_loading">Loading build.prop\u2026</string>
+    <string name="showbuild_error">Error loading build.prop\u2026</string>
+    <string name="showbuild_unknown">Unknown</string>
+    <string name="showbuild_version">Version</string>
+    <string name="showbuild_label">We should look because knowing is half the battle</string>
+
+    <!-- Mount System -->
+    <string name="pref_mount_title">Mount System</string>
+    <string name="pref_mount_summary">Mount /system RO/RW</string>
+
+    <!-- sysctl mod -->
+    <string name="pref_sysctl_title">Sysctl Mod</string>
+    <string name="pref_sysctl_summary">Sysctl makes the vm caches not clear as much so its not eating the cpu since we have high memory phones</string>
+
+    <!-- cron mod -->
+    <string name="pref_cron_title">Cron Mod</string>
+    <string name="pref_cron_summary">Cron drops the vm caches manually twice per day</string>
+
+    <!-- enable init.d -->
+    <string name="pref_init_title">Enable init.d</string>
+    <string name="pref_init_summary">for ROMS without init.d support</string>
+
+    <!-- overclocking -->
+    <string name="pref_oc_title">Overclocking profiles</string>
+    <string name="pref_oc_summary">enables overclocking</string>
+
+    <!-- OPEN SOURCE Dialoge -->
+    <string name="open_title">ROOT IS REQUIRED</string>
+    <string name="open_summary">This is the Open Source GUI to JakeBitesMods (github.com/n00bware/JBitesGUI)</string>
+
+<!-- string template
+
+    <string name=""></string>
+
+-->
+
+</resources>

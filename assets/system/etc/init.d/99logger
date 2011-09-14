@@ -1,0 +1,10 @@
+#!/system/bin/sh
+
+# Variables
+doLogger=1
+
+# disable logger - performance boost & save memory (comment and reboot for logcat)
+busybox mount -o remount,rw /system
+if busybox [ $doLogger -eq 1 ]; then
+rm /dev/log/main
+fi

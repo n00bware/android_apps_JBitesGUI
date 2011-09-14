@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- General settings -->
+    <PreferenceCategory android:key="general_category"
+        android:title="@string/general_title">
+
+        <PreferenceScreen android:key="showbuild" android:title="@string/showbuild_title" android:summary="@string/showbuild_label">
+            <intent android:action="android.intent.action.MAIN"
+                android:targetPackage="com.n00bware.jbitesgui"
+                android:targetClass="com.n00bware.jbitesgui.ShowBuildProp" />
+        </PreferenceScreen>
+
+        <ListPreference android:key="mount_pref"
+            android:dialogTitle="@string/pref_mount_title"
+            android:title="@string/pref_mount_title" android:summary="@string/pref_mount_summary"
+            android:entries="@array/entries_mount_explain"
+            android:entryValues="@array/entries_mount" />
+
+        <ListPreference android:key="sysctl_pref"
+            android:dialogTitle="@string/pref_sysctl_title"
+            android:title="@string/pref_sysctl_title" android:summary="@string/pref_sysctl_summary"
+            android:entries="@array/entries_sysctl_explain"
+            android:entryValues="@array/entries_sysctl" />
+
+        <ListPreference android:key="cron_pref"
+            android:dialogTitle="@string/pref_cron_title"
+            android:title="@string/pref_cron_title" android:summary="@string/pref_cron_summary"
+            android:entries="@array/entries_cron_explain"
+            android:entryValues="@array/entries_cron" />
+
+        <ListPreference android:key="init_pref"
+            android:dialogTitle="@string/pref_init_title"
+            android:title="@string/pref_init_title" android:summary="@string/pref_init_summary"
+            android:entries="@array/entries_init_explain"
+            android:entryValues="@array/entries_init"
+            android:enabled="false" />
+
+        <ListPreference android:key="oc_pref"
+            android:dialogTitle="@string/pref_oc_title"
+            android:title="@string/pref_oc_title" android:summary="@string/pref_oc_summary"
+            android:entries="@array/entries_oc_explain"
+            android:entryValues="@array/entries_oc" />
+
+    </PreferenceCategory>
+</PreferenceScreen>

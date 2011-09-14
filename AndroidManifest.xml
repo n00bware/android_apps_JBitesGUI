@@ -14,5 +14,12 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ShowBuildProp"
+                  android:label="@string/showbuild_label">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+
     </application>
 </manifest>

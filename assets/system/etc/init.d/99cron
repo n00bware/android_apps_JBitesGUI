@@ -1,0 +1,26 @@
+#!/system/bin/sh
+
+# Variables
+doCron=1
+
+# enable crond
+busybox mount -o remount,rw /system
+if busybox [ $doCron -eq 1 ]; then
+echo "root:x:0:0::data/cron:/system/xbin/bash" > /system/etc/passwd
+mount -o remount,rw rootfs /
+ln -s /system/xbin /xbin
+mount -o remount,ro rootfs /
+timezone='date +%z'
+	if [ $timezone = "0800" ]; then
+	TZ=PST8PDT
+	elif [ $timezone = "-0700" ]; then
+	TZ=MST7MDT
+	elif [ $timezone = "-0600" ]; then
+	TZ=CST6CDT
+	elif [ $timezone = "-0500" ]; then
+	TZ=EST5EDT
+	else TZ=PST8PDT
+	export TZ
+	crond -c /data/cron
+	fi
+fi
