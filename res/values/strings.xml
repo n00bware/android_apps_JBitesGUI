@@ -7,6 +7,10 @@
     <string name="general_title">JBitesGUI v1</string>
     <string name="main_title_head">JBitesGUI by n00bware</string>
 
+    <!-- Status of downloads -->
+    <string name="status_title">Status of downloads</string>
+    <string name="status"> </string>
+
     <!-- ShowBuildProp.java strings -->
     <string name="showbuild_title">Do you know what is in your build.prop</string>
     <string name="showbuild_dialog">This is your /system/build.prop</string>
@@ -39,6 +43,18 @@
     <!-- OPEN SOURCE Dialoge -->
     <string name="open_title">ROOT IS REQUIRED</string>
     <string name="open_summary">This is the Open Source GUI to JakeBitesMods (github.com/n00bware/JBitesGUI)</string>
+
+    <!-- zipalign apps -->
+    <string name="pref_zip_title">ZipAlign</string>
+    <string name="pref_zip_summary">Align all apps on boot</string>
+
+    <!-- logcat logging -->
+    <string name="pref_log_title">LogCat</string>
+    <string name="pref_log_summary">Script to control logcat\'s existance</string>
+
+    <!-- all mods -->
+    <string name="pref_all_title">All In One</string>
+    <string name="pref_all_summary">Install all of JakeBitesMods</string>
 
 <!-- string template
 

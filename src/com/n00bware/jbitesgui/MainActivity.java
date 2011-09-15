@@ -33,23 +33,28 @@ public class MainActivity extends PreferenceActivity implements
     private static final String REPLACE_CMD = "busybox sed -i \"/%s/ c %<s=%s\" /system/build.prop";
     private static final String SHOWBUILD_PATH = "/system/tmp/showbuild";
     private static final String DISABLE = "disable";
+    private static final String STATUS = "status";
     private static final String MOUNT_PREF = "mount_pref";
     private static final String SYSCTL_PREF = "sysctl_pref";
     private static final String CRON_PREF = "cron_pref";
     private static final String INIT_PREF = "init_pref";
     private static final String OC_PREF = "oc_pref";
-
-    // Strings for installScripts
-    public static final String SCRIPTS_PATH = "/system/bin";
+    private static final String ZIP_PREF = "zip_pref";
+    private static final String LOG_PREF = "log_pref";
+    private static final String ALL_PREF = "all_pref";
 
     //TAG is used for debugging in logcat
     private static final String TAG = "JBitesGUI";
 
+    private PreferenceScreen mStatus;
     private ListPreference mMountPref;
     private ListPreference mSysctlPref;
     private ListPreference mCronPref;
     private ListPreference mInitPref;
     private ListPreference mOCPref;
+    private ListPreference mZipPref;
+    private ListPreference mLogPref;
+    private ListPreference mAllPref;
     private AlertDialog mAlertDialog;
 
     @Override
@@ -61,6 +66,9 @@ public class MainActivity extends PreferenceActivity implements
 
         Log.d(TAG, "Loading prefs");
         PreferenceScreen prefSet = getPreferenceScreen();
+
+        mStatus = (PreferenceScreen) prefSet.findPreference(STATUS);
+        //mStatus.isEnabled="true";
 
         mMountPref = (ListPreference) prefSet.findPreference(MOUNT_PREF);
         mMountPref.setOnPreferenceChangeListener(this);
@@ -76,6 +84,15 @@ public class MainActivity extends PreferenceActivity implements
 
         mOCPref = (ListPreference) prefSet.findPreference(OC_PREF);
         mOCPref.setOnPreferenceChangeListener(this);
+
+        mZipPref = (ListPreference) prefSet.findPreference(ZIP_PREF);
+        mZipPref.setOnPreferenceChangeListener(this);
+
+        mLogPref = (ListPreference) prefSet.findPreference(LOG_PREF);
+        mLogPref.setOnPreferenceChangeListener(this);
+
+        mAllPref = (ListPreference) prefSet.findPreference(ALL_PREF);
+        mAllPref.setOnPreferenceChangeListener(this);
 
         /*
          * Mount /system RW and determine if /system/tmp exists; if it doesn't
@@ -105,6 +122,7 @@ public class MainActivity extends PreferenceActivity implements
                     }
                 });
         mAlertDialog.show();
+        Bin.findScripts();
     }
 
     public boolean onPreferenceChange(Preference pref, Object newValue) {
@@ -121,9 +139,25 @@ public class MainActivity extends PreferenceActivity implements
                 return Bin.modScripts("init", newValue.toString());
             } else if (pref == mOCPref) {
                 return Bin.modScripts("oc", newValue.toString());
+            } else if (pref == mZipPref) {
+                return Bin.modScripts("zip", newValue.toString());
+            } else if (pref == mLogPref) {
+                return Bin.modScripts("logger", newValue.toString());
+            } else if (pref == mAllPref) {
+                return Bin.allMods(newValue.toString());
             }
             Bin.mount("ro");
         }
         return false;
     }
+
+    /*public static void updateProgress(int currentSize, int totalSize) {
+        mStatus.setSummary(Long.toString((currentSize/totalSize)*100)+"%");
+        new String(DONE_DOWNLOAD = mStatus.getSummary().toString());
+        if (DONE_DOWNLOAD.equals("100%")) {
+            mStatus.isEnabled(false);
+        } else {
+            mStatus.isEnabled(true);
+        }
+    }*/
 }

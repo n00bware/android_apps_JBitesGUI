@@ -5,7 +5,13 @@
     <PreferenceCategory android:key="general_category"
         android:title="@string/general_title">
 
-        <PreferenceScreen android:key="showbuild" android:title="@string/showbuild_title" android:summary="@string/showbuild_label">
+        <PreferenceScreen android:key="status" 
+            android:title="@string/status_title"
+            android:summary="@string/status" 
+            android:enabled="true" />
+
+        <PreferenceScreen android:key="showbuild" 
+            android:title="@string/showbuild_title" android:summary="@string/showbuild_label">
             <intent android:action="android.intent.action.MAIN"
                 android:targetPackage="com.n00bware.jbitesgui"
                 android:targetClass="com.n00bware.jbitesgui.ShowBuildProp" />
@@ -41,6 +47,24 @@
             android:title="@string/pref_oc_title" android:summary="@string/pref_oc_summary"
             android:entries="@array/entries_oc_explain"
             android:entryValues="@array/entries_oc" />
+
+        <ListPreference android:key="zip_pref"
+            android:dialogTitle="@string/pref_zip_title"
+            android:title="@string/pref_zip_title" android:summary="@string/pref_zip_summary"
+            android:entries="@array/entries_zip_explain"
+            android:entryValues="@array/entries_zip" />
+
+        <ListPreference android:key="log_pref"
+            android:dialogTitle="@string/pref_log_title"
+            android:title="@string/pref_log_title" android:summary="@string/pref_log_summary"
+            android:entries="@array/entries_log_explain"
+            android:entryValues="@array/entries_log" />
+
+        <ListPreference android:key="all_pref"
+            android:dialogTitle="@string/pref_all_title"
+            android:title="@string/pref_all_title" android:summary="@string/pref_all_summary"
+            android:entries="@array/entries_all_explain"
+            android:entryValues="@array/entries_all" />
 
     </PreferenceCategory>
 </PreferenceScreen>
