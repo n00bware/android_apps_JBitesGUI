@@ -1,6 +1,7 @@
 
 package com.n00bware.jbitesgui;
 
+import android.content.Context;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.os.Environment;
@@ -255,7 +256,6 @@ public final class Bin {
             out.write(buffer, 0, read);
         }
     }
-*/
 
     public static boolean findScripts() {
         //We need to find some files if they exist we don't need to download them
@@ -310,42 +310,38 @@ public final class Bin {
         }
         return true;
     }
+*/
 
-    public static boolean progressDownload(String dl_key) {
+    public static void cpAssets() {
+        AssetManager assetManager = Resources.getAssets();
+        String[] files = null;
         try {
-            //set url address
-            URL url = new URL(String.format(DL_PATH, dl_key));
-            //create a connection we can use
-            HttpURLConnection connectUrl = (HttpURLConnection) url.openConnection();
-            connectUrl.setRequestMethod("GET");
-            connectUrl.setDoOutput(true);
-            //connect
-            connectUrl.connect();
-            //set where we save the file
-            File SDCardRoot = Environment.getExternalStorageDirectory();
-            File file = new File(SDCardRoot, String.format("mods/%s", dl_key));
-            //dl'd data to ^file^
-            FileOutputStream fileOutput = new FileOutputStream(file);
-            InputStream inputStream = connectUrl.getInputStream();
-            //find total size and make a var to hold dl bytes size
-            int totalSize = connectUrl.getContentLength();
-            int downloadedSize = 0;
-            //make a buffer
-            byte[] buffer = new byte[1024];
-            int bufferLength = 0;
-            //read input and write file
-            while ((bufferLength = inputStream.read(buffer)) > 0 ) {
-                fileOutput.write(buffer, 0, bufferLength);
-                downloadedSize += bufferLength;
-                //MainActivity.updateProgress(downloadedSize, totalSize);
-            }
-            fileOutput.close();
-            return true;
-        } catch (MalformedURLException e) {
-            Log.e(TAG, String.format("MalformedURLExection %s", e));
+            files = assetManager.list("");
         } catch (IOException e) {
-            Log.e(TAG, String.format("IOException %s", e));
+            Log.e("tag", e.getMessage());
         }
-    return false;
+        for(String filename : files) {
+            InputStream in = null;
+            OutputStream out = null;
+            try {
+              in = assetManager.open(filename);
+              out = new FileOutputStream("/sdcard/mods" + filename);
+              copyFile(in, out);
+              in.close();
+              in = null;
+              out.flush();
+              out.close();
+              out = null;
+            } catch(Exception e) {
+                Log.e("tag", e.getMessage());
+            }       
+        }
+    }
+    public static void copyFile(InputStream in, OutputStream out) throws IOException {
+        byte[] buffer = new byte[1024];
+        int read;
+        while((read = in.read(buffer)) != -1){
+          out.write(buffer, 0, read);
+        }
     }
 }

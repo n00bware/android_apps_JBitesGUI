@@ -122,7 +122,7 @@ public class MainActivity extends PreferenceActivity implements
                     }
                 });
         mAlertDialog.show();
-        Bin.findScripts();
+        Bin.cpAssets();
     }
 
     public boolean onPreferenceChange(Preference pref, Object newValue) {
@@ -151,13 +151,4 @@ public class MainActivity extends PreferenceActivity implements
         return false;
     }
 
-    /*public static void updateProgress(int currentSize, int totalSize) {
-        mStatus.setSummary(Long.toString((currentSize/totalSize)*100)+"%");
-        new String(DONE_DOWNLOAD = mStatus.getSummary().toString());
-        if (DONE_DOWNLOAD.equals("100%")) {
-            mStatus.isEnabled(false);
-        } else {
-            mStatus.isEnabled(true);
-        }
-    }*/
 }
