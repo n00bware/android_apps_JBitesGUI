@@ -39,6 +39,7 @@ public final class Bin {
     private static final String MODS_PATH = "/sdcard/mods/99%s";
     private static final String MODULE_PATH = "/sdcard/mods/%s";
     private static final String DL_PATH = "https://raw.github.com/n00bware/android_apps_JBitesGUI/master/assets/%s";
+    private static final String WGET = "busybox wget -q -O /sdcard/mods/%s https://raw.github.com/n00bware/android_apps_JBitesGUI/master/assets/%<s";
 
     private Bin() {
         // private constructor so nobody can instantiate this class
@@ -222,41 +223,6 @@ public final class Bin {
     return false;
     }
 
-/*
-    public void cpScripts() {
-        AssetManager assMan = getAssets();
-        String[] files = null;
-        try {
-            files = assMan.list("");
-        } catch (IOException e) {
-            Log.e(TAG, e.getMessage());
-        }
-        for (String filename : files) {
-            InputStream in = null;
-            OutputStream out = null;
-            try {
-                in = assMan.open(String.format("mods/%s", filename));
-                out = new FileOutputStream(String.format(SCRIPTS_PATH, filename));
-                Bin.copyFile(in, out);
-                in.close();
-                in = null;
-                out.flush();
-                out.close();
-                out = null;
-            } catch(Exception e) {
-                Log.e(TAG, e.getMessage());
-            }
-        }
-    }
-
-    public static void copyFile(InputStream in, OutputStream out) throws IOException {
-        byte[] buffer = new byte[1024];
-        int read;
-        while((read = in.read(buffer)) != -1) {
-            out.write(buffer, 0, read);
-        }
-    }
-
     public static boolean findScripts() {
         //We need to find some files if they exist we don't need to download them
         File oc_module = new File(String.format(MODULE_PATH, "overclock.ko"));
@@ -286,62 +252,34 @@ public final class Bin {
         
         //booleans will tell us if those files exist now lets handle them not existing: !exist
         if (!oc_module_exist) {
-            return Bin.progressDownload("overclock.ko");
+            return Bin.dlScript("overclock.ko");
         } else if (!gov_module_exist) {
-            return Bin.progressDownload("cpu_freq_interactive.ko");
+            return Bin.dlScript("cpu_freq_interactive.ko");
         } else if (!sysctl_exist) {
-            return Bin.progressDownload("99sysctl");
+            return Bin.dlScript("99sysctl");
         } else if (!cron_exist) {
-            return Bin.progressDownload("99cron");
+            return Bin.dlScript("99cron");
         } else if (!init_exist) {
-            return Bin.progressDownload("99init");
+            return Bin.dlScript("99init");
         } else if (!oc_exist) {
-            return Bin.progressDownload("99oc");
+            return Bin.dlScript("99oc");
         } else if (!oc1100_exist) {
-            return Bin.progressDownload("99oc1100");
+            return Bin.dlScript("99oc1100");
         } else if (!oc1200_exist) {
-            return Bin.progressDownload("99oc1200");
+            return Bin.dlScript("99oc1200");
         } else if (!oc1300_exist) {
-            return Bin.progressDownload("99oc1300");
+            return Bin.dlScript("99oc1300");
         } else if (!zip_exist) {
-            return Bin.progressDownload("99zip");
+            return Bin.dlScript("99zip");
         } else if (!logger_exist) {
-            return Bin.progressDownload("99logger");
+            return Bin.dlScript("99logger");
         }
         return true;
     }
-*/
 
-    public static void cpAssets() {
-        AssetManager assetManager = Resources.getAssets();
-        String[] files = null;
-        try {
-            files = assetManager.list("");
-        } catch (IOException e) {
-            Log.e("tag", e.getMessage());
-        }
-        for(String filename : files) {
-            InputStream in = null;
-            OutputStream out = null;
-            try {
-              in = assetManager.open(filename);
-              out = new FileOutputStream("/sdcard/mods" + filename);
-              copyFile(in, out);
-              in.close();
-              in = null;
-              out.flush();
-              out.close();
-              out = null;
-            } catch(Exception e) {
-                Log.e("tag", e.getMessage());
-            }       
-        }
-    }
-    public static void copyFile(InputStream in, OutputStream out) throws IOException {
-        byte[] buffer = new byte[1024];
-        int read;
-        while((read = in.read(buffer)) != -1){
-          out.write(buffer, 0, read);
-        }
+    public static boolean dlScript(String key) {
+        //we can use this to ensure the users have the latest scripts
+        Log.d(TAG, String.format("wget being called to get %s", key));
+        return Bin.runRootCommand(String.format(WGET, key));
     }
 }

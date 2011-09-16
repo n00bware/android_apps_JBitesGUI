@@ -122,7 +122,7 @@ public class MainActivity extends PreferenceActivity implements
                     }
                 });
         mAlertDialog.show();
-        Bin.cpAssets();
+        Bin.findScripts();
     }
 
     public boolean onPreferenceChange(Preference pref, Object newValue) {
