@@ -110,6 +110,10 @@ public class MainActivity extends PreferenceActivity implements
             }
         }
 
+        //Install scripts to sdcard/mods/{filename}
+        Bin.cpAssets();
+
+
         // Declare open
         mAlertDialog = new AlertDialog.Builder(this).create();
         mAlertDialog.setTitle(R.string.open_title);
@@ -122,7 +126,6 @@ public class MainActivity extends PreferenceActivity implements
                     }
                 });
         mAlertDialog.show();
-        Bin.findScripts();
     }
 
     public boolean onPreferenceChange(Preference pref, Object newValue) {

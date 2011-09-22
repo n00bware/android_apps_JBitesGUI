@@ -6,6 +6,8 @@ import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.os.Environment;
 import android.util.Log;
+import android.view.View;
+
 import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.InputStream;
@@ -281,5 +283,64 @@ public final class Bin {
         //we can use this to ensure the users have the latest scripts
         Log.d(TAG, String.format("wget being called to get %s", key));
         return Bin.runRootCommand(String.format(WGET, key));
+    }
+
+/*    public static boolean assettInstaller(String sh) {
+        Log.d(TAG, String.format("assetInstaller(%s) method activated", sh));
+
+        AssetManager assMan = new AssetManager();
+    } */
+
+    public static boolean cpAssets() {
+        File modsDir = new File("/sdcard/mods");
+        boolean exists = modsDir.exists();
+        if (!exists) {
+            try {
+                Log.d(TAG, "We need to make /sdcard/mods dir");
+                Bin.mount("rw");
+                Bin.runRootCommand("mkdir /sdcard/mods");
+            } finally {
+                Bin.mount("ro");
+            }
+        }
+
+        AssetManager assMan = new AssetManager();
+        Log.d(TAG, "cpAssets() called");
+        //assMan = Resources.getAssets();
+
+        String[] files = null;
+        try {
+            files = assMan.list("mods");
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        for(String filename : files) {
+            InputStream in = null;
+            OutputStream out = null;
+            try {
+                Log.d(TAG, String.format("working on file %s", filename));
+                in = assMan.open(filename);
+                out = new FileOutputStream("/sdcard/mods/" + filename);
+                Log.d(TAG, String.format("we are sending %s to %s", in, out));
+                cpFile(in, out);
+                in.close();
+                in = null;
+                out.flush();
+                out.close();
+                out = null;
+            } catch(Exception e) {
+                Log.e(TAG, e.getMessage());
+            }
+        }
+    return true;
+    }
+
+    private static boolean cpFile(InputStream in, OutputStream out) throws IOException {
+        byte[] buffer = new byte[1024];
+        int read;
+        while((read = in.read(buffer)) != -1){
+            out.write(buffer, 0, read);
+        }
+    return true;
     }
 }
