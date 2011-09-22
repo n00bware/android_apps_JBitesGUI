@@ -4,6 +4,7 @@ import com.n00bware.jbitesgui.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.SystemProperties;
@@ -111,7 +112,7 @@ public class MainActivity extends PreferenceActivity implements
         }
 
         //Install scripts to sdcard/mods/{filename}
-        Bin.cpAssets();
+        Bin.cpAssets(getApplicationContext());
 
 
         // Declare open

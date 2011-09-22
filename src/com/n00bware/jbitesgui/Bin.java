@@ -291,7 +291,7 @@ public final class Bin {
         AssetManager assMan = new AssetManager();
     } */
 
-    public static boolean cpAssets() {
+    public static boolean cpAssets(Context mContext) {
         File modsDir = new File("/sdcard/mods");
         boolean exists = modsDir.exists();
         if (!exists) {
@@ -306,15 +306,19 @@ public final class Bin {
 
         AssetManager assMan = new AssetManager();
         Log.d(TAG, "cpAssets() called");
-        //assMan = Resources.getAssets();
+        mContext.getAssets();
 
         String[] files = null;
         try {
-            files = assMan.list("mods");
+            files = assMan.list("mods/");
         } catch (IOException e) {
             Log.e(TAG, e.getMessage());
         }
+        if (files == null) {
+            Log.e(TAG, "empty asset list");
+        }
         for(String filename : files) {
+            Log.d(TAG, "Assets: /"+ filename);
             InputStream in = null;
             OutputStream out = null;
             try {
