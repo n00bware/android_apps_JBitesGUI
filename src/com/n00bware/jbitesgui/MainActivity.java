@@ -57,6 +57,7 @@ public class MainActivity extends PreferenceActivity implements
     private ListPreference mLogPref;
     private ListPreference mAllPref;
     private AlertDialog mAlertDialog;
+    private Context mMainContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +113,8 @@ public class MainActivity extends PreferenceActivity implements
         }
 
         //Install scripts to sdcard/mods/{filename}
+        //mMainContext.getApplicationContext();
+        //mMainContext = Context.getResources();
         Bin.cpAssets(getApplicationContext());
 
 

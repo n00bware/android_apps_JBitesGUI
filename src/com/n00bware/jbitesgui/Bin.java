@@ -8,6 +8,7 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.InputStream;
@@ -310,7 +311,7 @@ public final class Bin {
 
         String[] files = null;
         try {
-            files = assMan.list("mods/");
+            files = assMan.list("");
         } catch (IOException e) {
             Log.e(TAG, e.getMessage());
         }
@@ -323,17 +324,27 @@ public final class Bin {
             OutputStream out = null;
             try {
                 Log.d(TAG, String.format("working on file %s", filename));
-                in = assMan.open(filename);
+                in = new BufferedInputStream(new FileInputStream(filename));
+                //in = assMan.open(filename);
                 out = new FileOutputStream("/sdcard/mods/" + filename);
                 Log.d(TAG, String.format("we are sending %s to %s", in, out));
                 cpFile(in, out);
-                in.close();
                 in = null;
                 out.flush();
-                out.close();
                 out = null;
             } catch(Exception e) {
                 Log.e(TAG, e.getMessage());
+            } finally {
+                if (in != null) {
+                    try {
+                        in.close();
+                    } catch (IOException e) { }
+                }
+                if (out != null) {
+                    try {
+                        out.close();
+                    } catch (IOException e) { }
+                }
             }
         }
     return true;
