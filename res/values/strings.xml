@@ -26,35 +26,41 @@
 
     <!-- sysctl mod -->
     <string name="pref_sysctl_title">Sysctl Mod</string>
-    <string name="pref_sysctl_summary">Sysctl makes the vm caches not clear as much so its not eating the cpu since we have high memory phones</string>
+    <string name="pref_sysctl_summaryOn">Disable frequent clearing of VM cache</string>
+    <string name="pref_sysctl_summaryOff">Enable frequent clearing of VM cache</string>
 
     <!-- cron mod -->
     <string name="pref_cron_title">Cron Mod</string>
-    <string name="pref_cron_summary">Cron drops the vm caches manually twice per day</string>
+    <string name="pref_cron_summaryOn">Disable droping VM cache twice a day</string>
+    <string name="pref_cron_summaryOff">Enable droping VM cache twice a day</string>
 
     <!-- enable init.d -->
     <string name="pref_init_title">Enable init.d</string>
-    <string name="pref_init_summary">for ROMS without init.d support</string>
+    <string name="pref_init_summaryOn">Enable init.d support</string>
+    <string name="pref_init_summaryOff">Disable init.d support</string>
 
     <!-- overclocking -->
     <string name="pref_oc_title">Overclocking profiles</string>
     <string name="pref_oc_summary">enables overclocking</string>
 
     <!-- OPEN SOURCE Dialoge -->
-    <string name="open_title">ROOT IS REQUIRED</string>
-    <string name="open_summary">This is the Open Source GUI to JakeBitesMods (github.com/n00bware/JBitesGUI)</string>
+    <string name="explain_wait_title">ROOT IS REQUIRED</string>
+    <string name="explain_wait_summary">This is the Open Source GUI to JakebitesMods (github.com/n00bware/JBitesGUI) we have started installing JakebitesMods ...this will take a second please be patient</string>
 
     <!-- zipalign apps -->
     <string name="pref_zip_title">ZipAlign</string>
-    <string name="pref_zip_summary">Align all apps on boot</string>
+    <string name="pref_zip_summaryOn">Disable aligning all apps on boot</string>
+    <string name="pref_zip_summaryOff">Enable aligning all apps on boot</string>
 
     <!-- logcat logging -->
     <string name="pref_log_title">LogCat</string>
-    <string name="pref_log_summary">Script to control logcat\'s existance</string>
+    <string name="pref_log_summaryOn">Disable logcat on boot</string>
+    <string name="pref_log_summaryOff">Enable logcat on boot</string>
 
     <!-- all mods -->
     <string name="pref_all_title">All In One</string>
-    <string name="pref_all_summary">Install all of JakeBitesMods</string>
+    <string name="pref_all_summaryOn">Uninstall JakebitesMods</string>
+    <string name="pref_all_summaryOff">Install JakebitesMods</string>
 
 <!-- string template
 

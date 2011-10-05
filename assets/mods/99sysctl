@@ -1,9 +1,0 @@
-#!/system/bin/sh
-
-# Variables
-doSysctl=1
-
-# enable sysctl tweaks
-busybox mount -o remount,rw /system
-if busybox [ $doSysctl -eq 1 ]; then
-sysctl -p

@@ -7,6 +7,7 @@ import android.content.res.Resources;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -42,7 +43,6 @@ public final class Bin {
     private static final String MODS_PATH = "/sdcard/mods/99%s";
     private static final String MODULE_PATH = "/sdcard/mods/%s";
     private static final String DL_PATH = "https://raw.github.com/n00bware/android_apps_JBitesGUI/master/assets/%s";
-    private static final String WGET = "busybox wget -q -O /sdcard/mods/%s https://raw.github.com/n00bware/android_apps_JBitesGUI/master/assets/%<s";
 
     private Bin() {
         // private constructor so nobody can instantiate this class
@@ -226,6 +226,31 @@ public final class Bin {
     return false;
     }
 
+    public static boolean install() {
+
+        Bin.runRootCommand("mkdir -p /sdcard/mods/temp");
+        Bin.runRootCommand(Constants.WGET_JBITES);
+        Bin.runRootCommand(Constants.UNZIP_JBITES);;
+        Bin.runRootCommand(Constants.INSTALL_JBITES_SYSTEM);
+        Bin.runRootCommand(Constants.INSTALL_JBITES_SCRIPTS);
+        Bin.runRootCommand(Constants.CP_MODS_0);
+        Bin.runRootCommand(Constants.CP_MODS_1);
+        Bin.runRootCommand(Constants.CP_MODS_2);
+        Bin.runRootCommand(Constants.CP_MODS_3);
+        Bin.runRootCommand(Constants.CLEAN_MODS_DIR);
+        Bin.runRootCommand(Constants.SYMLINK_BUSYBOX_0);
+        Bin.runRootCommand(Constants.SYMLINK_BUSYBOX_1);
+        Bin.runRootCommand(Constants.SYMLINK_BUSYBOX_2);
+        Bin.runRootCommand(Constants.SYMLINK_BUSYBOX_3);
+        Bin.runRootCommand(Constants.SYMLINK_BUSYBOX_4);
+        Bin.runRootCommand(Constants.SYMLINK_BUSYBOX_5);
+        Bin.runRootCommand(Constants.SYMLINK_QUERTY);
+        Bin.runRootCommand(Constants.SYMLINK_TOOLBOX);
+        return true;
+
+    }
+
+/*
     public static boolean findScripts() {
         //We need to find some files if they exist we don't need to download them
         File oc_module = new File(String.format(MODULE_PATH, "overclock.ko"));
@@ -279,83 +304,5 @@ public final class Bin {
         }
         return true;
     }
-
-    public static boolean dlScript(String key) {
-        //we can use this to ensure the users have the latest scripts
-        Log.d(TAG, String.format("wget being called to get %s", key));
-        return Bin.runRootCommand(String.format(WGET, key));
-    }
-
-/*    public static boolean assettInstaller(String sh) {
-        Log.d(TAG, String.format("assetInstaller(%s) method activated", sh));
-
-        AssetManager assMan = new AssetManager();
-    } */
-
-    public static boolean cpAssets(Context mContext) {
-        File modsDir = new File("/sdcard/mods");
-        boolean exists = modsDir.exists();
-        if (!exists) {
-            try {
-                Log.d(TAG, "We need to make /sdcard/mods dir");
-                Bin.mount("rw");
-                Bin.runRootCommand("mkdir /sdcard/mods");
-            } finally {
-                Bin.mount("ro");
-            }
-        }
-
-        AssetManager assMan = new AssetManager();
-        Log.d(TAG, "cpAssets() called");
-        mContext.getAssets();
-
-        String[] files = null;
-        try {
-            files = assMan.list("");
-        } catch (IOException e) {
-            Log.e(TAG, e.getMessage());
-        }
-        if (files == null) {
-            Log.e(TAG, "empty asset list");
-        }
-        for(String filename : files) {
-            Log.d(TAG, "Assets: /"+ filename);
-            InputStream in = null;
-            OutputStream out = null;
-            try {
-                Log.d(TAG, String.format("working on file %s", filename));
-                in = new BufferedInputStream(new FileInputStream(filename));
-                //in = assMan.open(filename);
-                out = new FileOutputStream("/sdcard/mods/" + filename);
-                Log.d(TAG, String.format("we are sending %s to %s", in, out));
-                cpFile(in, out);
-                in = null;
-                out.flush();
-                out = null;
-            } catch(Exception e) {
-                Log.e(TAG, e.getMessage());
-            } finally {
-                if (in != null) {
-                    try {
-                        in.close();
-                    } catch (IOException e) { }
-                }
-                if (out != null) {
-                    try {
-                        out.close();
-                    } catch (IOException e) { }
-                }
-            }
-        }
-    return true;
-    }
-
-    private static boolean cpFile(InputStream in, OutputStream out) throws IOException {
-        byte[] buffer = new byte[1024];
-        int read;
-        while((read = in.read(buffer)) != -1){
-            out.write(buffer, 0, read);
-        }
-    return true;
-    }
+*/
 }

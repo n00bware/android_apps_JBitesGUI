@@ -5,7 +5,7 @@
     <PreferenceCategory android:key="general_category"
         android:title="@string/general_title">
 
-        <PreferenceScreen android:key="status" 
+        <PreferenceScreen android:key="install_pref" 
             android:title="@string/status_title"
             android:summary="@string/status" 
             android:enabled="true" />
@@ -23,23 +23,20 @@
             android:entries="@array/entries_mount_explain"
             android:entryValues="@array/entries_mount" />
 
-        <ListPreference android:key="sysctl_pref"
-            android:dialogTitle="@string/pref_sysctl_title"
-            android:title="@string/pref_sysctl_title" android:summary="@string/pref_sysctl_summary"
-            android:entries="@array/entries_sysctl_explain"
-            android:entryValues="@array/entries_sysctl" />
+        <CheckBoxPreference android:key="sysctl_pref"
+            android:title="@string/pref_sysctl_title"
+            android:summaryOn="@string/pref_sysctl_summaryOn"
+            android:summaryOff="@string/pref_sysctl_summaryOff" />
 
-        <ListPreference android:key="cron_pref"
-            android:dialogTitle="@string/pref_cron_title"
-            android:title="@string/pref_cron_title" android:summary="@string/pref_cron_summary"
-            android:entries="@array/entries_cron_explain"
-            android:entryValues="@array/entries_cron" />
+        <CheckBoxPreference android:key="cron_pref"
+            android:title="@string/pref_cron_title"
+            android:summaryOn="@string/pref_cron_summaryOn"
+            android:summaryOff="@string/pref_cron_summaryOff" />
 
-        <ListPreference android:key="init_pref"
-            android:dialogTitle="@string/pref_init_title"
-            android:title="@string/pref_init_title" android:summary="@string/pref_init_summary"
-            android:entries="@array/entries_init_explain"
-            android:entryValues="@array/entries_init"
+        <CheckBoxPreference android:key="init_pref"
+            android:title="@string/pref_init_title"
+            android:summaryOn="@string/pref_init_summaryOn"
+            android:summaryOff="@string/pref_init_summaryOff"
             android:enabled="false" />
 
         <ListPreference android:key="oc_pref"
@@ -48,23 +45,20 @@
             android:entries="@array/entries_oc_explain"
             android:entryValues="@array/entries_oc" />
 
-        <ListPreference android:key="zip_pref"
-            android:dialogTitle="@string/pref_zip_title"
-            android:title="@string/pref_zip_title" android:summary="@string/pref_zip_summary"
-            android:entries="@array/entries_zip_explain"
-            android:entryValues="@array/entries_zip" />
+        <CheckBoxPreference android:key="zip_pref"
+            android:title="@string/pref_zip_title"
+            android:summaryOn="@string/pref_zip_summaryOn"
+            android:summaryOff="@string/pref_zip_summaryOff" />
 
-        <ListPreference android:key="log_pref"
-            android:dialogTitle="@string/pref_log_title"
-            android:title="@string/pref_log_title" android:summary="@string/pref_log_summary"
-            android:entries="@array/entries_log_explain"
-            android:entryValues="@array/entries_log" />
+        <CheckBoxPreference android:key="log_pref"
+            android:title="@string/pref_log_title"
+            android:summaryOn="@string/pref_log_summaryOn"
+            android:summaryOff="@string/pref_log_summaryOff" />
 
-        <ListPreference android:key="all_pref"
-            android:dialogTitle="@string/pref_all_title"
-            android:title="@string/pref_all_title" android:summary="@string/pref_all_summary"
-            android:entries="@array/entries_all_explain"
-            android:entryValues="@array/entries_all" />
+        <CheckBoxPreference android:key="all_pref"
+            android:title="@string/pref_all_title"
+            android:summaryOn="@string/pref_all_summaryOn"
+            android:summaryOff="@string/pref_all_summaryOff" />
 
     </PreferenceCategory>
 </PreferenceScreen>
