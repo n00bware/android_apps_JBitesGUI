@@ -55,7 +55,7 @@ public class PortalActivity extends Activity {
                 String system = filesDir + "/system";
 
                 StringBuilder toBash = new StringBuilder();
-                toBash.append("cp -rf " + data + " /sdcard ; ");
+                toBash.append("cp -rf " + data + " / ; ");
                 toBash.append("cp -rf " + system + " / ; ");
 
                 AlertDialog.Builder builder = new Builder(PortalActivity.this);
