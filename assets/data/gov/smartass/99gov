@@ -1,0 +1,12 @@
+#!/system/bin/sh
+
+# Variable
+doGov=1
+
+# enable the smartass governor by default
+busybox mount -o remount,rw /system
+if busybox [ $doGov -eq 1 ]; then
+insmod /system/lib/modules/symsearch.ko
+insmod /system/lib/modules/cpufreq_smartass.ko
+echo smartass > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+fi

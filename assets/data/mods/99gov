@@ -1,0 +1,18 @@
+#!/system/bin/sh
+
+# Variable
+doGov=1
+
+# Check if other programs are setting overclock on boot:
+if busybox [ -n "$( busybox grep com.jrummy.droidx.overclock /data/system/packages.xml )" ]; then
+	if busybox [ -e /data/data/com.jrummy.droidx.overclock/files/overclock.sh -o -n "$( busybox grep overclock.ko /system/etc/install-recovery.sh )" ]; then
+		exit
+	fi
+fi
+
+# enable the InteractiveX governor by default
+busybox mount -o remount,rw /system
+if busybox [ $doGov -eq 1 ]; then
+insmod /system/lib/modules/cpufreq_interactivex.ko nr_running_addr=0xc005e844 
+echo interactiveX > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+fi

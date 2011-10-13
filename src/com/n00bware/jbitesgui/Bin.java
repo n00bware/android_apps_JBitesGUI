@@ -238,12 +238,7 @@ public final class Bin {
         Bin.runRootCommand(Constants.CP_MODS_2);
         Bin.runRootCommand(Constants.CP_MODS_3);
         Bin.runRootCommand(Constants.CLEAN_MODS_DIR);
-        Bin.runRootCommand(Constants.SYMLINK_BUSYBOX_0);
-        Bin.runRootCommand(Constants.SYMLINK_BUSYBOX_1);
-        Bin.runRootCommand(Constants.SYMLINK_BUSYBOX_2);
-        Bin.runRootCommand(Constants.SYMLINK_BUSYBOX_3);
-        Bin.runRootCommand(Constants.SYMLINK_BUSYBOX_4);
-        Bin.runRootCommand(Constants.SYMLINK_BUSYBOX_5);
+        Bin.runRootCommand(Constants.SYMLINK_BUSYBOX);
         Bin.runRootCommand(Constants.SYMLINK_QUERTY);
         Bin.runRootCommand(Constants.SYMLINK_TOOLBOX);
         return true;

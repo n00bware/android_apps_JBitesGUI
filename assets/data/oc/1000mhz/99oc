@@ -1,0 +1,39 @@
+#!/system/bin/sh
+
+# Set variables:
+doFreq=1
+doSleep=1
+doOverclock=0
+LOG_FILE=/mnt/sdcard/CM7D2GB.log
+sleepTime=50s
+Caddress=`busybox grep -m 1 " T omap2_clk_init_cpufreq_table" /proc/kallsyms | busybox cut -d ' ' -f1`
+Saddress=`busybox grep -m 1 " t cpufreq_stats_update" /proc/kallsyms | busybox cut -d ' ' -f1`
+
+# Check if module is there and overclock on boot is enabled:
+if busybox [ -e /system/lib/modules/overclock.ko -a $doOverclock -eq 1 ]; then
+	
+	# Load the module
+	insmod /system/lib/modules/overclock.ko omap2_clk_init_cpufreq_table_addr=0x$Caddress
+	echo 0x$Saddress > /proc/overclock/cpufreq_stats_update_addr
+
+	# Wait for the system to be sane:
+	if busybox [ $doSleep -eq 1 ]; then
+	sleep $sleepTime
+	fi
+
+	# Make sure the module loaded:
+	if busybox [ -d /proc/overclock ]; then
+		echo 50 > /proc/overclock/max_vsel
+		echo 1000000 > /proc/overclock/max_rate
+		echo 1 300000000 20 > /proc/overclock/mpu_opps
+		echo 2 600000000 30 > /proc/overclock/mpu_opps
+		echo 3 800000000 40 > /proc/overclock/mpu_opps
+		echo 4 1000000000 50 > /proc/overclock/mpu_opps
+		echo 0 1000000 > /proc/overclock/freq_table
+		echo 1 800000 > /proc/overclock/freq_table
+		echo 2 600000 > /proc/overclock/freq_table
+		echo 3 300000 > /proc/overclock/freq_table
+	else
+		echo "Failed to load module" | busybox tee -a $LOG_FILE
+	fi
+fi

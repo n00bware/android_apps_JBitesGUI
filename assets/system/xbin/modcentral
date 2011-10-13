@@ -1,0 +1,1448 @@
+#!/system/bin/sh
+
+#  -------- Copyright (C) 2011 Jacob Regruit (@jakebites) -------
+#  
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+#  
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#  
+#  You should have received a copy of the GNU General Public License
+#  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#  
+#  ----------------------------------------------------------------------
+
+
+# Mods!
+
+# Variables
+doMods=1
+doGovi=0
+doGovx=1
+
+# Functions
+
+sysctlMods()
+{
+	if busybox [ -n "$( busybox grep doSysctl=1 /system/etc/init.d/99mods )" ]; then
+	echo -n "Sysctl tweaks are currently running, would you like to turn them off? (y/n) : "
+		read sysctlonMod
+		case $sysctlonMod in
+			y|Y)
+				busybox mount -o remount,rw /system
+				busybox sed -i 's|doSysctl=.*|doSysctl=0|' /system/etc/init.d/99mods
+				echo
+				echo
+				echo "Sysctl tweaks disabled."
+				echo -n "You must reboot for the changes to take effect, reboot now? (y/n) : "
+				read rebootNow
+				case $rebootNow in
+					y|Y)
+						reboot
+					;;
+				esac		
+				echo
+				echo
+			;;
+			n|N)
+				echo
+				echo
+				echo -n "Sysctl tweaks remain enabled, press enter to continue: "
+				read anyKeymenu
+				case $anyKeymenu in
+					*)
+					;;
+				esac
+				echo
+				echo
+			;;			
+		esac
+	else
+	echo -n "Sysctl tweaks are currently not running, would you like to turn them on? (y/n) : "
+		read sysctloffMod
+		case $sysctloffMod in
+			y|Y)
+				busybox mount -o remount,rw /system
+				busybox sed -i 's|doSysctl=.*|doSysctl=1|' /system/etc/init.d/99mods
+				echo
+				echo
+				echo "Sysctl tweaks enabled."
+				echo -n "You must reboot for the changes to take effect, reboot now? (y/n) : "
+				read rebootNow
+				case $rebootNow in
+					y|Y)
+						reboot
+					;;
+				esac
+				echo
+				echo
+			;;
+			n|N)
+				echo
+				echo
+				echo -n "Sysctl tweaks remain disabled, press enter to continue: "
+				read anyKeymenu
+				case $anyKeymenu in
+					*)
+					;;
+				esac
+				echo
+				echo
+			;;			
+		esac
+	fi
+}
+
+cronMods()
+{
+	if busybox [ -n "$( busybox grep doCron=1 /system/etc/init.d/99mods )" ]; then
+	echo -n "The cron service is currently running, would you like to turn it off? (y/n) : "
+		read crononMod
+		case $crononMod in
+			y|Y)
+				busybox mount -o remount,rw /system
+				busybox sed -i 's|doCron=.*|doCron=0|' /system/etc/init.d/99mods
+				echo
+				echo
+				echo "Cron service disabled."
+				echo -n "You must reboot for the changes to take effect, reboot now? (y/n) : "
+				read rebootNow
+				case $rebootNow in
+					y|Y)
+						reboot
+					;;
+				esac
+			;;
+			n|N)
+				echo
+				echo
+				echo -n "Cron service remain enabled, press enter to continue: "
+				read anyKeymenu
+				case $anyKeymenu in
+					*)
+					;;
+				esac
+				echo
+				echo
+			;;			
+		esac
+	else
+	echo -n "The cron service is currently not running, would you like to turn it on? (y/n) : "
+		read cronoffMod
+		case $cronoffMod in
+			y|Y)
+				busybox mount -o remount,rw /system
+				busybox sed -i 's|doCron=.*|doCron=1|' /system/etc/init.d/99mods
+				echo
+				echo
+				echo "Cron service enabled."
+				echo -n "You must reboot for the changes to take effect, reboot now? (y/n) : "
+				read rebootNow
+				case $rebootNow in
+					y|Y)
+						reboot
+					;;
+				esac
+			;;
+			n|N)
+				echo
+				echo
+				echo -n "The cron service remains disabled, press enter to continue: "
+				read anyKeymenu
+				case $anyKeymenu in
+					*)
+					;;
+				esac
+				echo
+				echo
+			;;			
+		esac
+	fi
+}
+
+loggerMods()
+{
+	if busybox [ -n "$( busybox grep doLogger=1 /system/etc/init.d/99mods )" ]; then
+	echo -n "The logger is currently disabled, would you like to turn it on? (y/n) : "
+		read loggeronMod
+		case $loggeronMod in
+			y|Y)
+				busybox mount -o remount,rw /system
+				busybox sed -i 's|doLogger=.*|doLogger=0|' /system/etc/init.d/99mods
+				echo
+				echo
+				echo "Logger enabled."
+				echo -n "You must reboot for the changes to take effect, reboot now? (y/n) : "
+				read rebootNow
+				case $rebootNow in
+					y|Y)
+						reboot
+					;;
+				esac
+			;;
+			n|N)
+				echo
+				echo
+				echo -n "Logger remains disabled, press enter to continue: "
+				read anyKeymenu
+				case $anyKeymenu in
+					*)
+					;;
+				esac
+				echo
+				echo
+			;;			
+		esac
+	else
+	echo -n "The logger is currently enabled, would you like to turn it off? (y/n) : "
+		read loggeroffMod
+		case $loggeroffMod in
+			y|Y)
+				busybox mount -o remount,rw /system
+				busybox sed -i 's|doLogger=.*|doLogger=1|' /system/etc/init.d/99mods
+				echo
+				echo
+				echo "Logger disabled."
+				echo -n "You must reboot for the changes to take effect, reboot now? (y/n) : "
+				read rebootNow
+				case $rebootNow in
+					y|Y)
+						reboot
+					;;
+				esac
+			;;
+			n|N)
+				echo
+				echo
+				echo -n "The logger remains enabled, press enter to continue: "
+				read anyKeymenu
+				case $anyKeymenu in
+					*)
+					;;
+				esac
+				echo
+				echo
+			;;			
+		esac
+	fi
+}
+
+govMods()
+{
+	gov=$1
+	busybox mount -o remount,rw /system
+	if busybox [ $doGovx -eq 0 ]; then
+		echo
+		echo
+		echo -n "This will activate and set on boot the ${gov} governor, would you like to continue? (y/n) :"
+		read govChange
+		case $govChange in
+			y|Y)
+				busybox sed -i 's|doGovi=.*|doGovi=0|' /system/xbin/modcentral
+				busybox sed -i 's|doGovx=.*|doGovx=0|' /system/xbin/modcentral
+				busybox cp -f /data/gov/${gov}/99gov /system/etc/init.d/
+				busybox chmod 755 /system/etc/init.d/99gov
+				echo ${gov} > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+				echo
+				echo
+				echo -n "The ${gov} governor has been activated and set at boot. Press enter to see current CPU info: "
+				read checkCpu
+				case $checkCpu in
+					*) checkCpu
+				esac
+			;;
+			n|N)
+				echo -n "The ${gov} governor was NOT activated or set at boot. Press enter to go back to the governor menu :"
+				read govmodsMenu
+				case $govmodsMenu in
+					*) govMenu
+					;;
+				esac
+			;;
+		esac
+	else
+		echo
+		echo
+		echo "This will set on boot the ${gov} governor but it will not be activated until you reboot."
+		echo -n "This is because InteractiveX is currently running and it will cause issues until you reboot. Continue? (y/n) :"
+		read donewGov
+		case $donewGov in
+			y|Y)
+				busybox sed -i 's|doGovi=.*|doGovi=0|' /system/xbin/modcentral
+				busybox sed -i 's|doGovx=.*|doGovx=0|' /system/xbin/modcentral
+				busybox cp -f /data/gov/${gov}/99gov /system/etc/init.d/
+				busybox chmod 755 /system/etc/init.d/99gov			
+				echo -n "The ${gov} governor has been set at boot, but requires a reboot to take effect. Reboot now? (y/n) :"
+				read doReboot
+				case $doReboot in
+					y|Y) reboot
+					;;
+					n|N) govMenu
+					;;
+				esac
+			;;
+			n|N)
+				echo -n "The ${gov} governor was NOT activated. Press enter to continue: "
+				read anyKeymenu
+				case $anyKeymenu in
+					*) govMenu
+					;;
+				esac
+			;;
+		esac
+	fi
+}
+
+doInteractive()
+{
+	busybox mount -o remount,rw /system
+	if busybox [ $doGovx -eq 0 ]; then
+		echo
+		echo
+		echo -n "This will activate and set on boot the interactive governor, would you like to continue? (y/n) :"
+		read changeGov
+		case $changeGov in
+			y|Y)
+				busybox sed -i 's|doGovi=.*|doGovi=1|' /system/xbin/modcentral
+				busybox sed -i 's|doGovx=.*|doGovx=0|' /system/xbin/modcentral
+				busybox cp -f /data/gov/interactive/99gov /system/etc/init.d/
+				busybox chmod 755 /system/etc/init.d/99gov
+				insmod /system/lib/modules/cpufreq_interactive.ko
+				echo interactive > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+				echo
+				echo
+				echo -n "The interactive governor has been activated and set at boot. Press enter to see current CPU info: "
+				read checkCpu
+				case $checkCpu in
+					*) checkCpu
+				esac
+			;;
+			n|N)
+				echo -n "The interactive governor was NOT activated or set at boot. Press enter to go back to the governor menu :"
+				read govmodsMenu
+				case $govmodsMenu in
+					*) govMenu
+					;;
+				esac
+			;;
+		esac
+	else
+		echo
+		echo
+		echo "This will set on boot the interactive governor but it will not be activated until you reboot."
+		echo -n "This is because InteractiveX is currently running and it will cause issues until you reboot. Continue? (y/n) :"
+		read donewGov
+		case $donewgov in
+			y|Y)
+				busybox sed -i 's|doGovi=.*|doGovi=1|' /system/xbin/modcentral
+				busybox sed -i 's|doGovx=.*|doGovx=0|' /system/xbin/modcentral
+				busybox cp -f /data/gov/interactive/99gov /system/etc/init.d/
+				busybox chmod 755 /system/etc/init.d/99gov			
+				echo -n "The interactive governor has been set at boot, but requires a reboot to take effect. Reboot now? (y/n) :"
+				read doReboot
+				case $doReboot in
+					y|Y) reboot
+					;;
+				esac
+			;;
+			n|N)
+				echo -n "The interactive governor was NOT activated. Press enter to continue: "
+				read anyKeymenu
+				case $anyKeymenu in
+					*) govMenu
+					;;
+				esac
+			;;
+		esac
+	fi
+}
+	
+doInteractivex()
+{
+	busybox mount -o remount,rw /system
+	if busybox [ $doGovi -eq 0 ]; then
+		echo
+		echo
+		echo -n "This will activate and set on boot the interactiveX governor, would you like to continue? (y/n) :"
+		read changeGov
+		case $changeGov in
+			y|Y)
+				busybox sed -i 's|doGovi=.*|doGovi=0|' /system/xbin/modcentral
+				busybox sed -i 's|doGovx=.*|doGovx=1|' /system/xbin/modcentral
+				busybox cp -f /data/gov/interactivex/99gov /system/etc/init.d/
+				busybox chmod 755 /system/etc/init.d/99gov
+				insmod /system/lib/modules/cpufreq_interactivex.ko nr_running_addr=0xc005e844
+				echo interactiveX > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+				echo
+				echo
+				echo -n "The interactiveX governor has been activated and set at boot. Press enter to see current CPU info: "
+				read checkCpu
+				case $checkCpu in
+					*) checkCpu
+				esac
+			;;
+			n|N)
+				echo -n "The interactiveX governor was NOT activated or set at boot. Press enter to go back to the governor menu :"
+				read govmodsMenu
+				case $govmodsMenu in
+					*) govMenu
+					;;
+				esac
+			;;
+		esac
+	else
+		echo
+		echo
+		echo "This will set on boot the interactiveX governor but it will not be activated until you reboot."
+		echo -n "This is because Interactive is currently running and it will cause issues until you reboot. Continue? (y/n) :"
+		read donewGov
+		case $donewgov in
+			y|Y)
+				busybox sed -i 's|doGovi=.*|doGovi=0|' /system/xbin/modcentral
+				busybox sed -i 's|doGovx=.*|doGovx=1|' /system/xbin/modcentral
+				busybox cp -f /data/gov/interactivex/99gov /system/etc/init.d/
+				busybox chmod 755 /system/etc/init.d/99gov			
+				echo -n "The interactiveX governor has been set at boot, but requires a reboot to take effect. Reboot now? (y/n) :"
+				read doReboot
+				case $doReboot in
+					y|Y) reboot
+					;;
+					n|N) govMenu
+					;;
+				esac
+			;;
+			n|N)
+				echo -n "The interactiveX governor was NOT activated. Press enter to continue: "
+				read anyKeymenu
+				case $anyKeymenu in
+					*) govMenu
+					;;
+				esac
+			;;
+		esac
+	fi
+}
+
+onDemand()
+{
+	echo
+	echo
+	echo -n "This will revert back to stock governor, ondemand. Continue? (y/n) "
+	read onDemand
+	case $onDemand in
+		y|Y)
+			busybox mount -o remount,rw /system
+			echo ondemand > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+			busybox sed -i 's|doGovi=.*|doGovi=0|' /system/xbin/modcentral
+			busybox sed -i 's|doGovx=.*|doGovx=0|' /system/xbin/modcentral
+			busybox sed -i 's|doGov=.*|doGov=0|' /system/etc/init.d/99gov
+			echo
+			echo
+			echo -n "The ondemand governor has been reset to default. Press enter to see CPU info: "
+			read anyKeymenu
+			case $anyKeymenu in
+				*) checkCpu
+				;;
+			esac
+		;;
+		n|N)
+			echo
+			echo
+			echo -n "The ondemand governor was not reset. Press enter to continue: "
+			read anyKeymenu
+			case $anyKeymenu in
+				*) govMenu
+				;;
+			esac
+		;;
+	esac
+}
+
+zipMods()
+{
+	if busybox [ -n "$( busybox grep doZip=1 /system/etc/init.d/99mods )" ]; then
+	echo -n "The zipalign at boot mod is currently running, would you like to turn it off? (y/n) : "
+		read ziponMod
+		case $ziponMod in
+			y|Y)
+				busybox mount -o remount,rw /system
+				busybox sed -i 's|doZip=.*|doZip=0|' /system/etc/init.d/99mods
+				echo
+				echo
+				echo "Zipalign at boot has been disabled."
+				echo -n "You must reboot for the changes to take effect, reboot now? (y/n) : "
+				read rebootNow
+				case $rebootNow in
+					y|Y)
+						reboot
+					;;
+				esac
+			;;
+			n|N)
+				echo
+				echo
+				echo -n "Zipalign at boot remains enabled, press enter to continue: "
+				read anyKeymenu
+				case $anyKeymenu in
+					*)
+					;;
+				esac
+				echo
+				echo
+			;;			
+		esac
+	else
+	echo -n "The zipalign at boot mod is currently not running, would you like to turn it on? (y/n) : "
+		read zipoffMod
+		case $zipoffMod in
+			y|Y)
+				busybox mount -o remount,rw /system
+				busybox sed -i 's|doZip=.*|doZip=1|' /system/etc/init.d/99mods
+				echo
+				echo
+				echo "Zipalign at boot has been enabled."
+				echo -n "You must reboot for the changes to take effect, reboot now? (y/n) : "
+				read rebootNow
+				case $rebootNow in
+					y|Y)
+						reboot
+					;;
+				esac
+			;;
+			n|N)
+				echo
+				echo
+				echo -n "Zipalign at boot remains disabled, press enter to continue: "
+				read anyKeymenu
+				case $anyKeymenu in
+					*)
+					;;
+				esac
+				echo
+				echo
+			;;			
+		esac
+	fi
+}
+
+doSupercharge()
+{
+	echo
+	echo -n "This will take you to the V6 Supercharger(v8) script by zeppelinrox. Would you like to continue? (y/n) : "
+	read superCharge
+	case $superCharge in
+		y|Y)
+			busybox1172 sh /system/xbin/v6supercharger8.sh
+		;;
+		n|N)
+			exit
+		;;
+	esac
+}
+
+bootRecovery()
+{
+	if busybox [ -n "$( busybox grep doRecovery=1 /system/etc/init.d/01recovery )" ]; then
+	echo -n "Recovery on each reboot is currently enabled, would you like to turn it off? (y/n) : "
+		read recoveryoffMod
+		case $recoveryoffMod in
+			y|Y)
+				busybox mount -o remount,rw /system
+				busybox sed -i 's|doRecovery=.*|doRecovery=0|' /system/etc/init.d/01recovery
+				echo
+				echo
+				echo "Recovery at boot disabled, press enter to continue: "
+				read anyKeymenu
+				case $anyKeymenu in
+					*)
+					;;
+				esac
+			;;
+			n|N)
+				echo
+				echo
+				echo -n "Recovery at boot remains enabled, press enter to continue: "
+				read anyKeymenu
+				case $anyKeymenu in
+					*)
+					;;
+				esac
+			;;			
+		esac
+	else
+	echo -n "Recovery on each reboot is currently disabled, would you like to turn it on? (y/n) : "
+		read recoveryonMod
+		case $recoveryonMod in
+			y|Y)
+				busybox mount -o remount,rw /system
+				busybox sed -i 's|doRecovery=.*|doRecovery=1|' /system/etc/init.d/01recovery
+				busybox echo 1 > /data/.recovery_mode; sync;
+				echo
+				echo
+				echo "Recovery at boot enabled, press enter to continue: "
+				read anyKeymenu
+				case $anyKeymenu in
+					*)
+					;;
+				esac
+			;;
+			n|N)
+				echo
+				echo
+				echo -n "Recovery at boot remains disabled, press enter to continue: "
+				read anyKeymenu
+				case $anyKeymenu in
+					*)
+					;;
+				esac
+			;;			
+		esac
+	fi
+}
+
+
+undervoltMods()
+{	
+	freq=$1
+	echo
+	echo
+	echo -n "This will install, activate and set the ${freq} overclock/undervolt mods at boot. Would you like to continue? (y/n) : "
+	read goOcuv
+	case $goOcuv in
+		y|Y)
+			busybox mount -o remount,rw /system
+			echo 1 > /data/.recovery_mode; sync;
+			busybox cp -f /data/oc/${freq}/99oc /system/etc/init.d/
+			busybox chmod 755 /system/etc/init.d/99oc
+			busybox sed -i 's|doSleep=.*|doSleep=0|' /system/etc/init.d/99oc
+			busybox sh /system/etc/init.d/99oc
+			busybox sed -i 's|doOverclock=.*|doOverclock=1|' /system/etc/init.d/99oc
+			busybox sed -i 's|doSleep=.*|doSleep=1|' /system/etc/init.d/99oc
+			echo
+			echo
+			echo -n "The ${freq} overclock/undervolt mods have been activated and set at boot. Press enter to show the new/current CPU info: "
+			read anyKeyuv
+			case $anyKeyuv in
+				*)
+					checkCpu
+				;;
+			esac
+		;;
+		n|N)
+			echo
+			echo
+			echo -n "The ${freq} overclock/undervolt mods were NOT installed. Press enter to continue: "
+			read anyKeynotuv
+			case $anyKeynotuv in
+				*)
+					undervoltMenu
+				;;
+			esac
+		;;
+	esac
+}
+
+disableOc()
+{
+	echo
+	echo -n "This will disable all Overclocking/Undervolting, continue? (y/n) : "
+	read disableOc
+	case $disableOc in
+		y|Y)
+			busybox mount -o remount,rw /system
+			busybox sed -i 's|doOverclock=.*|doOverclock=0|' /system/etc/init.d/99oc
+			echo
+			echo -n "You must reboot for the changes to take effect, reboot now? (y/n) : "
+			read rebootNow
+			case $rebootNow in
+				y|Y)
+					reboot
+				;;
+			esac
+		;;
+		n|N)
+			echo
+			echo -n "Overclocking/Undervolting was not disbaled. Press enter to continue: "
+			read anyKeymenu
+			case $anyKeymenu in
+				*)
+				;;
+			esac
+		;;
+	esac
+}
+
+disableMods()
+{
+	
+	if busybox [ -n "$( busybox grep doMods=1 /system/xbin/modcentral )" ]; then
+	echo -n "JakebitesMods are currently running, would you like to disable them? (y/n) : "
+		read offMods
+		case $offMods in
+			y|Y)
+				busybox mount -o remount,rw /system
+				busybox sed -i 's|doMods=.*|doMods=0|' /system/xbin/modcentral
+				busybox rm /system/etc/init.d/99mods
+				busybox rm /system/etc/init.d/99gov
+				busybox rm /system/etc/init.d/99oc
+				busybox cp -f /data/mods/build.prop
+				echo -n "You must reboot for the changes to take effect, reboot now? (y/n) : "
+				read rebootNow
+				case $rebootNow in
+					y|Y)
+						reboot
+					;;
+				esac
+			;;
+			n|N)
+				echo
+				echo
+				echo -n "JakebitesMods remain enabled, press enter to continue: "
+				read anyKeymenu
+				case $anyKeymenu in
+					*)
+					;;
+				esac
+				echo
+				echo
+			;;			
+		esac
+	else
+	echo -n "JakebitesMods are currently not running. enable them now? (y/n) : "
+		read onMods
+		case $onMods in
+			y|Y)
+				busybox mount -o remount,rw /system
+				busybox sed -i 's|doMods=.*|doMods=1|' /system/xbin/modcentral
+				busybox cp /data/mods/* /system/etc/init.d/
+				busybox chmod -R 755 /system/etc/init.d/
+				echo
+				echo
+				echo "JakebitesMods enabled."
+				echo -n "You must reboot for the changes to take effect, reboot now? (y/n) : "
+				read rebootNow
+				case $rebootNow in
+					y|Y)
+						reboot
+					;;
+				esac
+			;;
+			n|N)
+				echo
+				echo
+				echo -n "JakebitesMods remains disabled, press enter to continue: "
+				read anyKeymenu
+				case $anyKeymenu in
+					*)
+					;;
+				esac
+				echo
+				echo
+			;;			
+		esac
+	fi
+}
+
+navigateMenu()
+{
+	 	echo "============================================="
+		echo "|                                           |"
+		echo "| 1) Navigate to the Main menu              |"
+		echo "| 2) Navigate to the Overclock menu         |"
+		echo "| 3) Navigate to the Governor menu          |"
+		echo "| 4) Navigate to the Check mods menu        |"
+		echo "|                                           |"
+		echo "============================================="
+		echo -n "Choose where you would like to go: "
+		read chooseMenu
+		case $chooseMenu in
+			2) undervoltMenu				;;
+			3) govMenu						;;
+			4) checkMenu					;;
+		esac 		
+}
+checkCpu()
+{
+	if busybox [ -n "$( busybox grep doOverclock=1 /system/etc/init.d/99oc )" ]; then
+		if busybox [ -n "$( busybox grep doFreq=1 /system/etc/init.d/99oc )" ]; then
+		echo
+		echo "     Undervolted at 1Ghz         "
+		echo "================================"
+		echo "|                              |"
+		echo "| Mhz | 300 | 600 | 800 | 1000 |"
+		echo "|------------------------------|"
+		echo "|Volts| 20  | 30  | 40  |  50  |"
+		echo "|                              |"
+		echo "================================"
+		echo
+			echo "Currently your governor is:"
+			cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+			echo -n "Press enter to continue: "
+			read anyKeymenu
+			case $anyKeymenu in
+				*) navigateMenu
+				;;
+			esac
+		elif busybox [ -n "$( busybox grep doFreq=2 /system/etc/init.d/99oc )" ]; then
+		echo
+		echo "Overclocked/Undervolted at 1.1Ghz"
+		echo "================================"
+		echo "|                              |"
+		echo "| Mhz | 300 | 600 | 800 | 1100 |"
+		echo "|------------------------------|"
+		echo "|Volts| 20  | 30  | 40  |  55  |"
+		echo "|                              |"
+		echo "================================"
+		echo
+			echo "Currently your governor is:"
+			cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+ 			echo -n "Press enter to continue: "
+			read anyKeymenu
+			case $anyKeymenu in
+				*) navigateMenu
+				;;
+			esac
+		elif busybox [ -n "$( busybox grep doFreq=3 /system/etc/init.d/99oc )" ]; then
+		echo
+		echo "Overclocked/Undervolted at 1.15Ghz"
+		echo "================================"
+		echo "|                              |"
+		echo "| Mhz | 300 | 600 | 800 | 1150 |"
+		echo "|------------------------------|"
+		echo "|Volts| 20  | 30  | 40  |  58  |"
+		echo "|                              |"
+		echo "================================"
+		echo
+			echo "Currently your governor is:"
+			cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+			echo -n "Press enter to continue: "
+			read anyKeymenu
+			case $anyKeymenu in
+				*) navigateMenu
+				;;
+			esac 
+		elif busybox [ -n "$( busybox grep doFreq=4 /system/etc/init.d/99oc )" ]; then
+		echo
+		echo "Overclocked/Undervolted at 1.2Ghz"
+		echo "================================"
+		echo "|                              |"
+		echo "| Mhz | 300 | 600 | 800 | 1200 |"
+		echo "|------------------------------|"
+		echo "|Volts| 20  | 30  | 40  |  60  |"
+		echo "|                              |"
+		echo "================================"
+		echo
+			echo "Currently your governor is:"
+			cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+			echo -n "Press enter to continue: "
+			read anyKeymenu
+			case $anyKeymenu in
+				*) navigateMenu
+				;;
+			esac 
+		elif busybox [ -n "$( busybox grep doFreq=5 /system/etc/init.d/99oc )" ]; then
+		echo
+		echo "Overclocked/Undervolted at 1.25Ghz"
+		echo "================================"
+		echo "|                              |"
+		echo "| Mhz | 300 | 600 | 800 | 1250 |"
+		echo "|------------------------------|"
+		echo "|Volts| 20  | 30  | 40  |  65  |"
+		echo "|                              |"
+		echo "================================"
+		echo
+			echo "Currently your governor is:"
+			cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+	 		echo -n "Press enter to continue: "
+			read anyKeymenu
+			case $anyKeymenu in
+				*) navigateMenu
+				;;
+			esac 
+		elif busybox [ -n "$( busybox grep doFreq=6 /system/etc/init.d/99oc )" ]; then
+		echo
+		echo "Overclocked/Undervolted at 1.3Ghz"
+		echo "================================"
+		echo "|                              |"
+		echo "| Mhz | 300 | 600 | 800 | 1300 |"
+		echo "|------------------------------|"
+		echo "|Volts| 20  | 30  | 40  |  70  |"
+		echo "|                              |"
+		echo "================================"
+		echo
+			echo "Currently your governor is:"
+			cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+	 		echo -n "Press enter to continue: "
+			read anyKeymenu
+			case $anyKeymenu in
+				*) navigateMenu
+				;;
+			esac 
+		fi
+	else
+		echo
+		echo "You're running stock voltages at 1Ghz."
+			echo "Currently your governor is:"
+			cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+	 		echo -n "Press enter to continue: "
+			read anyKeymenu
+			case $anyKeymenu in
+				*) navigateMenu
+				;;
+			esac 
+		
+	fi
+	
+}
+
+
+checkInit()
+{
+	if busybox [ -n "$( busybox grep doOnboot=0 /system/etc/init.d/99mods )" ]; then
+	echo -n "No mods are currently enabled, please enable init support for them to work, press enter to go back to the Check Mods menu: "
+		read anyKeymenu
+		case $anyKeymenu in
+			*) checkMenu
+			;;
+		esac
+	fi
+}
+
+checkSysctl()
+{
+	if busybox [ -n "$( busybox grep doSysctl=0 /system/etc/init.d/99mods )" ]; then
+	echo "Sysctl is currently not enabled."
+	sleep 1
+		if busybox [ $1 ]; then
+		checkMenu
+		fi	
+	else
+	echo "Sysctl's good."
+	sleep 1
+		if busybox [ $1 ]; then
+		checkMenu
+		fi
+	fi
+}
+
+checkCron()
+{
+	echo "Checking for cron's session ID: "
+	pgrep -f crond
+	if [ -z "$?" ]; then
+	echo "Cron is not running."
+	sleep 1
+		if busybox [ $1 ]; then
+		checkMenu
+		fi
+	else
+	echo "Cron's running."
+	sleep 1
+		if busybox [ $1 ]; then
+		checkMenu
+		fi
+	fi
+}
+
+checkLogger()
+{
+	if busybox [ -n "$( busybox grep doLogger=0 /system/etc/init.d/99mods )" ]; then
+	echo "Logger is enabled, disable to save battery."
+	sleep 1
+		if busybox [ $1 ]; then
+		checkMenu
+		fi
+	else
+	echo "Logger is disabled, which saves battery."
+	sleep 1
+		if busybox [ $1 ]; then
+		checkMenu
+		fi
+	fi
+}
+
+checkZipalign()
+{
+	if busybox [ -n "$( busybox grep doZip=0 /system/etc/init.d/99mods )" ]; then
+	echo "Zipalign at boot is not enabled."
+	sleep 1
+		if busybox [ $1 ]; then
+		checkMenu
+		fi
+	else
+	echo "Zipalign at boot is enabled."
+	sleep 1
+		if busybox [ $1 ]; then
+		checkMenu
+		fi
+	fi
+}
+
+checkRecovery()
+{
+	if busybox [ -n "$( busybox grep doRecovery=0 /system/etc/init.d/01recovery )" ]; then
+	echo "Recovery at boot currently disabled."
+	sleep 1
+		if busybox [ $1 ]; then
+		checkMenu
+		fi
+	else
+	echo "Recovery at boot currently enabled."
+	sleep 1
+		if busybox [ $1 ]; then
+		checkMenu
+		fi
+	fi
+}
+
+checkSdcard()
+{
+	if busybox [ -n "$( busybox grep doSdcard=0 /system/etc/init.d/99mods )" ]; then
+	echo "Sdcard speed up currently not enabled."
+	sleep 1
+		if busybox [ $1 ]; then
+		checkMenu
+		fi
+	else
+	echo "Sdcard speed up currently enabled."
+	sleep 1
+		if busybox [ $1 ]; then
+		checkMenu
+		fi
+	fi	
+}
+
+checkSystem()
+{
+	if busybox [ -n "$( busybox grep doSystem=0 /system/etc/init.d/99mods )" ]; then
+	echo "System speed up currently not enabled."
+	sleep 1
+		if busybox [ $1 ]; then
+		checkMenu
+		fi
+	else
+	echo "System speed up currently enabled."
+	sleep 1
+		if busybox [ $1 ]; then
+		checkMenu
+		fi
+	fi	
+}
+
+checkAll()
+{
+	checkInit
+	checkSysctl
+	checkCron
+	checkLogger
+	checkZipalign
+	checkRecovery
+	checkSdcard
+	checkSystem
+	checkCpu
+}
+
+
+sdcardMods()
+{
+	if busybox [ -n "$( busybox grep doSdcard=1 /system/etc/init.d/99mods )" ]; then
+	echo -n "The sdcard speed up is currently running, would you like to turn it off? (y/n): "
+		read sdcardonMod
+		case $sdcardonMod in
+			y|Y)
+				busybox mount -o remount,rw /system
+				busybox sed -i 's|doSdcard=.*|doSdcard=0|' /system/etc/init.d/99mods
+				echo
+				echo
+				echo "Sdcard speed up disabled."
+				echo -n "You must reboot for the changes to take effect, reboot now? (y/n): "
+				read rebootNow
+				case $rebootNow in
+					y|Y)
+						reboot
+					;;
+				esac
+			;;
+			n|N)
+				echo
+				echo
+				echo -n "Sdcard speed up remains enabled, press enter to continue: "
+				read anyKeymenu
+				case $anyKeymenu in
+					*)
+					;;
+				esac
+				echo
+				echo
+			;;			
+		esac
+	else
+	echo -n "The sdcard speed up is currently not running, would you like to turn it on? (y/n): "
+		read sdcardoffMod
+		case $sdcardoffMod in
+			y|Y)
+				busybox mount -o remount,rw /system
+				busybox sed -i 's|doSdcard=.*|doSdcard=1|' /system/etc/init.d/99mods
+				echo
+				echo
+				echo "Sdcard speed up enabled."
+				echo -n "You must reboot for the changes to take effect, reboot now? (y/n): "
+				read rebootNow
+				case $rebootNow in
+					y|Y)
+						reboot
+					;;
+				esac
+			;;
+			n|N)
+				echo
+				echo
+				echo -n "The sdcard speed up remains disabled, press enter to continue: "
+				read anyKeymenu
+				case $anyKeymenu in
+					*)
+					;;
+				esac
+				echo
+				echo
+			;;			
+		esac
+	fi
+}
+
+systemupMods()
+{
+	if busybox [ -n "$( busybox grep doSystem=1 /system/etc/init.d/99mods )" ]; then
+	echo -n "The system speed up is currently running, would you like to turn it off? (y/n): "
+		read sspeedOn
+		case $sspeedOn in
+			y|Y)
+				busybox mount -o remount,rw /system
+				busybox sed -i 's|doSystem=.*|doSystem=0|' /system/etc/init.d/99mods
+				echo
+				echo
+				echo "System speed up disabled."
+				echo -n "You must reboot for the changes to take effect, reboot now? (y/n): "
+				read rebootNow
+				case $rebootNow in
+					y|Y)
+						reboot
+					;;
+				esac
+			;;
+			n|N)
+				echo
+				echo
+				echo -n "System speed up remains enabled, press enter to continue: "
+				read anyKeymenu
+				case $anyKeymenu in
+					*)
+					;;
+				esac
+				echo
+				echo
+			;;			
+		esac
+	else
+	echo -n "The system speed up is currently not running, would you like to turn it on? (y/n): "
+		read sspeedOff
+		case $sspeedOff in
+			y|Y)
+				busybox mount -o remount,rw /system
+				busybox sed -i 's|doSystem=.*|doSystem=1|' /system/etc/init.d/99mods
+				echo
+				echo
+				echo "System speed up enabled."
+				echo -n "You must reboot for the changes to take effect, reboot now? (y/n): "
+				read rebootNow
+				case $rebootNow in
+					y|Y)
+						reboot
+					;;
+				esac
+			;;
+			n|N)
+				echo
+				echo
+				echo -n "The system speed up remains disabled, press enter to continue: "
+				read anyKeymenu
+				case $anyKeymenu in
+					*)
+					;;
+				esac
+				echo
+				echo
+			;;			
+		esac
+	fi
+}
+
+doDonate()
+{
+	echo
+	echo
+	echo "============================================="
+	echo "|                                           |"
+	echo "| If you like my work and would like to,    |"
+	echo "| you can donate to me right through this   |"
+	echo "| script! Thank you for all of your         |"
+	echo "| support, it as greatly appreciated! :)    |"
+	echo "|                                           |"
+	echo "============================================="
+	echo -n "Would you like to donate the jakebites? (y/n): "
+	read doDonate
+	case $doDonate in
+	y|Y)
+		am start -a android.intent.action.VIEW -d http://tinyurl.com/68xn7z9
+	;;
+	esac
+}
+
+doSoftboot()
+{
+	busybox mount -o remount,rw /system
+	pkill zygote
+}
+
+doInit()
+{
+	if busybox [ -n "$( busybox grep doOnboot=1 /system/etc/init.d/99mods )" ]; then
+	echo -n "Your init is already running fine, press enter to continue: "
+		read anyKeymenu
+		case $anyKeymenu in
+			*)
+			;;
+		esac
+	else
+	echo -n "Your ROM currently doesn't support init, turn init on now? (y/n) : "
+		read initonMod
+		case $initonMod in
+			y|Y)
+				busybox mount -o remount,rw /system
+				busybox mkdir /system/usr/bin/
+				busybox cp /data/init/pm_init.sh /system/usr/bin/
+				chmod 755 /system/usr/bin/pm_init.sh
+				echo
+				echo
+				echo -n "You must reboot for the changes/mods to take effect, reboot now? (y/n) : "
+				read rebootNow
+				case $rebootNow in
+					y|Y)
+						reboot
+					;;
+				esac
+			;;
+			n|N)
+				echo
+				echo
+				echo -n "Init not enabled, press enter to continue: "
+				read anyKeymenu
+				case $anyKeymenu in
+					*)
+					;;
+				esac
+				echo
+				echo
+			;;			
+		esac
+	fi
+}
+
+
+# Check Mods menu
+
+		checkMenu()
+		{
+			echo "============================================="
+			echo "|            Check Mods Menu.               |"
+			echo "|                                           |"
+			echo "| 1) Check all mods                         |"
+			echo "| 2) Check sysctl mods                      |"
+			echo "| 3) Check for cron service                 |"
+			echo "| 4) Check to see if logger is disabled     |"
+			echo "| 5) Check zipalign at boot                 |"
+			echo "| 6) Check recovery at boot                 |"
+			echo "| 7) Check sdcard speed up at boot          |"
+			echo "| 8) Check system speed up at boot          |"
+			echo "| 9) Check to see if init is working        |"
+			echo "| 10) Check CPU info                        |"
+			echo "| 11) Go back to the main menu              |"
+			echo "============================================="
+			echo -n "What would you like to check?"
+			read checkmodsMenu
+			case $checkmodsMenu in
+				1) checkAll									;;
+				2) checkSysctl 1							;;
+				3) checkCron 1								;;
+				4) checkLogger 1							;;
+				5) checkZipalign 1							;;
+				6) checkRecovery 1							;;
+				7) checkSdcard 1							;;
+				8) checkSystem 1							;;
+				9) checkInit								;;
+				10) checkCpu								;;
+			esac
+		}
+		
+
+# Gov Menu
+
+		govMenu()
+		{
+			echo "============================================="
+			echo "|  Choose your governor of preference.      |"
+			echo "|                                           |"
+			echo "| 1) InteractiveX (Best imo)                |"
+			echo "| 2) Smartass                               |"
+			echo "| 3) Interactive                            |"
+			echo "| 4) Conservative                           |"
+			echo "| 5) Ondemand                               |"
+			echo "| 6) Check current CPU settings             |"
+			echo "| 7) Go back to the main menu               |"
+			echo "============================================="
+			echo
+			echo "Currently your governor is:"
+			cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+			echo -n "Please choose which governor you would like."
+			read changeGov
+			case $changeGov in
+				1) doInteractivex						;;
+				2) govMods smartass						;;
+				3) doInteractive						;;
+				4) govMods conservative					;;
+				5) onDemand								;;
+				6) checkCpu								;;
+			esac
+		}
+						
+					
+				
+
+# Overclock/Undervolt menu
+
+	undervoltMenu()
+	{
+		echo "============================================="
+		echo "|                                           |"
+		echo "| This will enable overclocking and/or      |"
+		echo "| undervolting on your device. Not all      |"
+		echo "| devices can handle these frequencies      |"
+		echo "| or voltages. For that reason a script     |"
+		echo "| will be run that will boot you into       |"
+		echo "| clockworkmod recovery the next time you   |"
+		echo "| reboot. Weather it be from the phone      |"
+		echo "| crashing from the overclocking and/or     |"
+		echo "| the undervolting, or if you just reboot   |"
+		echo "| it yourself, you will be brought to       |"
+		echo "| clockworkmod recovery. At which point you |"
+		echo "| you can just reflash my mods .zip and the |"
+		echo "| overclock/undervolt will be reset.        |"
+		echo "|                                           |"
+		echo "| This is a safety measure taken to prevent |"
+		echo "| bricking any phones.                      |"
+		echo "|                                           |"
+		echo "============================================="
+		echo
+		echo -n "Please confirm you have read and understand this safety precaution. (y/n) : "
+		read confirmSafe
+		case $confirmSafe in
+			y|Y)
+			;;
+			n|Y)
+				exit
+			;;
+		esac
+
+		
+		echo "============================================="
+		echo "| This is the new overclock/unvervolt menu. |"
+		echo "| As you can see I've added a few things!   |"
+		echo "| Set your CPU however you'd like. :)       |"
+		echo "|                                           |"
+		echo "| 1) Undervolt 1.0 GHZ                      |"
+		echo "| 2) Overclock/Undervolt 1.1 GHZ            |"
+		echo "| 3) Overclock/Undervolt 1.15 GHZ           |"
+		echo "| 4) Overclock/Undervolt 1.2 GHZ            |"
+		echo "| 5) Overclock/Undervolt 1.25 GHZ           |"
+		echo "| 6) Overclock/Undervolt 1.3 GHZ            |"
+		echo "| 7) Disable all Overlcock/Undervolt        |"
+		echo "| 8) Check current CPU settings             |"
+		echo "| 9) Go back to the main menu               |"
+		echo "| 10) Exit ModCentral                       |"
+		echo "|                                           |"
+		echo "============================================="
+		echo
+		echo -n "Please choose which setting you would like."
+		read ocuvChoice
+		case $ocuvChoice in
+			1) undervoltMods 1000mhz					;;
+			2) undervoltMods 1100mhz					;;
+			3) undervoltMods 1150mhz					;;
+			4) undervoltMods 1200mhz					;;
+			5) undervoltMods 1250mhz					;;
+			6) undervoltMods 1300mhz					;;
+			7) disableOc								;;
+			8) checkCpu									;;
+			10) exit									;;
+	
+		esac
+	}
+
+
+
+# Mod Central main menu
+
+exitLoop=0
+while busybox [ $exitLoop -eq 0 ]; do
+echo "============================================="
+echo "|                                           |"
+echo "| Welcome to the Mod Central Main Menu!     |"
+echo "|                                           |"
+echo "============================================="
+echo "|                                           |"
+echo "| 1) Sysctl Mod                             |"
+echo "| 2) Cron Mod                               |"
+echo "| 3) Zipalign Mod                           |"
+echo "| 4) Choose Your Governor Mod               |"
+echo "| 5) Logger Mod                             |"
+echo "| 6) Overclock/Undervolt Mods               |"
+echo "| 7) Sdcard Speed Up Mods                   |"
+echo "| 8) System Speed Up Mods                   |"
+echo "| 9) V6 Supercharger Mods by zeppelinrox    |"
+echo "| 10) Check Mods                            |"
+echo "| 11) Enable recovery on each reboot        |"
+echo "| 12) Enable init for ROMS without          |"
+echo "| 13) Disable/re-enable all mods            |"
+echo "| 14) Softboot                              |"
+echo "| 15) Reboot                                |"
+echo "| 16) Donate/Show your support! :)          |"
+echo "| 17) Exit ModCentral                       |"
+echo "|                                           |"
+echo "============================================="
+echo -n "Please choose what you would like to do."
+read mainChoice
+case $mainChoice in
+	1) sysctlMods 					;;
+	2) cronMods						;;
+	3) zipMods	 					;;
+	4) govMenu						;;
+	5) loggerMods 					;;
+	6) undervoltMenu				;;
+	7) sdcardMods					;;
+	8) systemupMods					;;
+	9) doSupercharge 				;;
+	10) checkMenu					;;
+	11) bootRecovery				;;
+	12) doInit						;;
+	13) disableMods					;;
+	14) doSoftboot					;;
+	15) reboot						;;
+	16) doDonate					;;
+	17) exit						;;
+esac
+done

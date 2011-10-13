@@ -1,0 +1,96 @@
+#!/system/bin/sh
+
+# Variables
+doOnboot=1
+doLoop=0
+doBuild=1
+doCron=1
+doLogger=1
+doSysctl=1
+doZip=1
+doSdcard=1
+doSystem=1
+
+busybox mount -o remount,rw /system
+
+# load all modules besides interactive and interactivex
+insmod /system/lib/modules/cpufreq_conservative.ko
+insmod /system/lib/modules/cpufreq_smartass.ko
+insmod /system/lib/modules/symsearch.ko
+
+
+# file system speedups
+if busybox [ $doSystem -eq 1 ]; then
+busybox mount -o remount,noatime,barrier=0,nobh /system
+busybox mount -o remount,noatime,barrier=0,nobh /data
+busybox mount -o remount,noatime,barrier=0,nobh /cache
+fi
+
+# sd card speed boost
+if busybox [ $doSdcard -eq 1 ]; then
+	if [ -e /sys/devices/virtual/bdi/179:0/read_ahead_kb ]; then
+	echo 1024 > /sys/devices/virtual/bdi/179:0/read_ahead_kb
+	fi
+fi
+
+# build.prop edits
+if busybox [ $doBuild -eq 1 ]; then
+busybox cp -f /system/build.prop /data/mods/
+busybox sed -i 's|doBuild=.*|doBuild=0|' /system/etc/init.d/99mods
+busybox sed -i 's|windowsmgr.max_events_per_sec=.*|windowsmgr.max_events_per_sec=95|' /system/build.prop
+busybox sed -i 's|wifi.supplicant_scan_interval = .*|wifi.supplicant_scan_interval = 180|' /system/build.prop
+busybox sed -i 's|dalvik.vm.heapsize=.*|dalvik.vm.heapsize=50m|' /system/build.prop
+busybox sed -i 's|mot.proximity.delay=.*|mot.proximity.delay=100|' /system/build.prop
+busybox sed -i 's|ro.telephony.call_ring.delay=.*|ro.telephony.call_ring.delay=750|' /system/build.prop
+
+CURRENT_VALUE=` busybox grep ro.build.display.id /system/build.prop | busybox cut -d '=' -f2 `
+NEW_VALUE="${CURRENT_VALUE}+JBMv12"
+
+busybox sed -i "s|ro.build.display.id=.*|ro.build.display.id=${NEW_VALUE}|" /system/build.prop
+fi
+
+# Loop first boot for build.prop
+if [ $doLoop -eq 1 ]; then
+busybox sed -i 's|doLoop=.*|doLoop=0|' /system/etc/init.d/99mods
+reboot
+fi
+
+# enable crond
+busybox mount -o remount,rw /system
+if busybox [ $doCron -eq 1 ]; then
+echo "root:x:0:0::data/cron:/system/xbin/bash" > /system/etc/passwd
+mount -o remount,rw rootfs /
+ln -s /system/xbin /xbin
+mount -o remount,ro rootfs /
+timezone='date +%z'
+	if [ $timezone = "0800" ]; then
+	TZ=PST8PDT
+	elif [ $timezone = "-0700" ]; then
+	TZ=MST7MDT
+	elif [ $timezone = "-0600" ]; then
+	TZ=CST6CDT
+	elif [ $timezone = "-0500" ]; then
+	TZ=EST5EDT
+	else TZ=PST8PDT
+	export TZ
+	crond -c /data/cron
+	fi
+fi
+
+# disable logger - performance boost & save memory (comment and reboot for logcat)
+busybox mount -o remount,rw /system
+if busybox [ $doLogger -eq 1 ]; then
+rm /dev/log/main
+fi
+
+# enable sysctl tweaks
+busybox mount -o remount,rw /system
+if busybox [ $doSysctl -eq 1 ]; then
+sysctl -p
+fi
+
+# zipalign apks at boot
+busybox mount -o remount,rw /system
+if busybox [ $doZip -eq 1 ]; then
+zipalign_apks
+fi
