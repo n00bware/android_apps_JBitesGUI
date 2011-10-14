@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".MainActivity"
+        <activity android:name=".ModsActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

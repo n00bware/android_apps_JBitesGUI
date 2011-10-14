@@ -5,11 +5,6 @@
     <PreferenceCategory android:key="general_category"
         android:title="@string/general_title">
 
-        <PreferenceScreen android:key="install_pref" 
-            android:title="@string/status_title"
-            android:summary="@string/status" 
-            android:enabled="true" />
-
         <PreferenceScreen android:key="showbuild" 
             android:title="@string/showbuild_title" android:summary="@string/showbuild_label">
             <intent android:action="android.intent.action.MAIN"
@@ -33,12 +28,6 @@
             android:summaryOn="@string/pref_cron_summaryOn"
             android:summaryOff="@string/pref_cron_summaryOff" />
 
-        <CheckBoxPreference android:key="init_pref"
-            android:title="@string/pref_init_title"
-            android:summaryOn="@string/pref_init_summaryOn"
-            android:summaryOff="@string/pref_init_summaryOff"
-            android:enabled="false" />
-
         <ListPreference android:key="oc_pref"
             android:dialogTitle="@string/pref_oc_title"
             android:title="@string/pref_oc_title" android:summary="@string/pref_oc_summary"
@@ -54,11 +43,6 @@
             android:title="@string/pref_log_title"
             android:summaryOn="@string/pref_log_summaryOn"
             android:summaryOff="@string/pref_log_summaryOff" />
-
-        <CheckBoxPreference android:key="all_pref"
-            android:title="@string/pref_all_title"
-            android:summaryOn="@string/pref_all_summaryOn"
-            android:summaryOff="@string/pref_all_summaryOff" />
 
     </PreferenceCategory>
 </PreferenceScreen>

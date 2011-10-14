@@ -49,17 +49,13 @@ public class ModsActivity extends PreferenceActivity implements
     //so we don't install on other devices
     private static final String DEVICE = SystemProperties.get("ro.product.model");
 
-    private PreferenceScreen mInstallPref;
     private ListPreference mMountPref;
     private CheckBoxPreference mSysctlPref;
     private CheckBoxPreference mCronPref;
-    private CheckBoxPreference mInitPref;
     private ListPreference mOCPref;
     private CheckBoxPreference mZipPref;
     private CheckBoxPreference mLogPref;
-    private CheckBoxPreference mAllPref;
     private AlertDialog mAlertDialog;
-    private ProgressDialog mProgressDialog;
     private Context mMainContext;
 
     @Override
@@ -90,35 +86,12 @@ public class ModsActivity extends PreferenceActivity implements
                 });
         mAlertDialog.show();
 
-        mInstallPref = (PreferenceScreen) prefSet.findPreference(INSTALL_PREF);
-        mInstallPref.setSummary("loading...");
-        Toast.makeText(ModsActivity.this, "Don't touch the screen after initiating download", Toast.LENGTH_LONG).show();
-
         File modsDir = new File("/sdcard/mods");
         boolean md = modsDir.exists();
         if (!md) {
             Log.d(TAG, "We need to make /sdcard/mods dir");
             Bin.runRootCommand("mkdir /sdcard/mods");
         }
-
-        findPreference(INSTALL_PREF).setOnPreferenceClickListener(
-            new OnPreferenceClickListener() {
-                public boolean onPreferenceClick(Preference preference) {
-                Log.d(TAG, "I'd click that shit");
-                final ProgressDialog dialog = ProgressDialog.show(ModsActivity.this, "Hey I'm working here",
-"stop looking at me swan!", true);
-                new Thread() {
-                    public void run() {
-                        try {
-                            Bin.install();
-                            sleep(5000);
-                        } catch (Exception e) {}
-                        dialog.dismiss();
-                    }
-                }.start();
-                return true;
-                }
-            });
 
         mMountPref = (ListPreference) prefSet.findPreference(MOUNT_PREF);
         mMountPref.setOnPreferenceChangeListener(this);
@@ -187,20 +160,14 @@ public class ModsActivity extends PreferenceActivity implements
         boolean value;
         Log.d(TAG, "you chose " + pref);
         try {
-            Bin.mount("rw");
             if (pref == mCronPref) {
                 value = mCronPref.isChecked();
                 return Bin.modScripts("cron", String.valueOf(value ? "1" : "0"));
-            } else if (pref == mInitPref) {
-                value = mInitPref.isChecked();
-                return Bin.modScripts("init", String.valueOf(value ? "1" : "0"));
             } else if (pref == mZipPref) {
                 value = mZipPref.isChecked();
                 return Bin.modScripts("zip", String.valueOf(value ? "1" : "0"));
             }
-        } finally {
-            Bin.mount("ro");
-        }
+        } finally {}
     return false;
     }
 }

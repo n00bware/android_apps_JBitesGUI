@@ -31,7 +31,8 @@ public class PortalActivity extends Activity {
 
     private final int MENU_DONATE_jbirdvegas = 1;
     private final int MENU_DONATE_jakebites = 2;
-    private final int MENU_CODE = 3;
+    private final int PREF = 3;
+    private final int MENU_CODE = 4;
 
     private static final String GITHUB = "https://github.com/n00bware/android_apps_JBitesGUI";
     private static final String DONATE_jbirdvegas = "http://bit.ly/oCWMo0";
@@ -43,12 +44,12 @@ public class PortalActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.install);
 
-        unzipAssets();
-
         Button install = (Button)findViewById(R.id.install);
         install.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                unzipAssets();
 
                 String filesDir = getFilesDir().getAbsolutePath();
                 String data = filesDir + "/data";
@@ -161,6 +162,7 @@ public class PortalActivity extends Activity {
         menu.add(0, MENU_DONATE_jbirdvegas, 0, "Donate to JBirdVegas").setIcon(R.drawable.paypal);
         menu.add(0, MENU_DONATE_jakebites, 0, "Donate to Jakebites").setIcon(R.drawable.paypal);
         menu.add(0, MENU_CODE, 0, "Show me the code").setIcon(R.drawable.github);
+        menu.add(0, PREF, 0, "Mods").setIcon(R.drawable.github);
         return result;
     }
  
@@ -173,6 +175,10 @@ public class PortalActivity extends Activity {
             return website(DONATE_jakebites);
         case MENU_CODE:
             return website(GITHUB);
+        case PREF:
+            Intent intent = new Intent(PortalActivity.this,ModsActivity.class);
+            startActivity(intent);
+            return true;
         }
         return false;
     }
