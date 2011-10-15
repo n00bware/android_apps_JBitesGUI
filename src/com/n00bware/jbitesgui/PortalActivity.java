@@ -81,6 +81,14 @@ public class PortalActivity extends Activity {
                 builder.create().show();
             }
         });
+
+        Button reboot = (Button)findViewById(R.id.reboot);
+        reboot.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bin.runRootCommand("reboot");
+            }
+        });
     }
 
     final static String ZIP_FILTER = "assets";
@@ -162,7 +170,7 @@ public class PortalActivity extends Activity {
         menu.add(0, MENU_DONATE_jbirdvegas, 0, "Donate to JBirdVegas").setIcon(R.drawable.paypal);
         menu.add(0, MENU_DONATE_jakebites, 0, "Donate to Jakebites").setIcon(R.drawable.paypal);
         menu.add(0, MENU_CODE, 0, "Show me the code").setIcon(R.drawable.github);
-        menu.add(0, PREF, 0, "Mods").setIcon(R.drawable.github);
+        menu.add(0, PREF, 0, "Mods").setIcon(R.drawable.mods);
         return result;
     }
  

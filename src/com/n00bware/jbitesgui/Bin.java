@@ -32,12 +32,12 @@ public final class Bin {
     private static final String SHOWBUILD_PATH = "/system/tmp/showbuild";
     private static final String ENABLE = "enable";
     private static final String DISABLE = "disable";
-    private static final String MODS = "busybox sed -i \"/%s/ c %<s=% /system/etc/init.d/99mods";
-    private static final String CP_OC_SCRIPT = "cp /data/mods/99oc%s /system/etc/init.d/99oc";
-    private static final String SYSCTL_CMD = "busybox sed -i \"/doSysctl/ c doSystl=%s /system/etc/init.d/99mods";
-    private static final String LOGGER_CMD = "busybox sed -i \"/doLogger/ c doLogger=%s /system/etc/init.d/99mods";
-    private static final String CRON_CMD = "busybox sed -i \"/doCron/ c doCron=%s /system/etc/init.d/99mods";
-    private static final String ZIP_CMD = "busybox sed -i \"/doZip/ c doZip=%s /system/etc/init.d/99mods";
+    private static final String MODS = "busybox sed -i \"/%s/ c %<s=%\" /system/etc/init.d/99mods";
+    private static final String CP_OC_SCRIPT = "cp /data/oc/%s/99oc /system/etc/init.d/99oc";
+    private static final String SYSCTL_CMD = "busybox sed -i \"/doSysctl/ c doSystl=%s\" /system/etc/init.d/99mods";
+    private static final String LOGGER_CMD = "busybox sed -i \"/doLogger/ c doLogger=%s\" /system/etc/init.d/99mods";
+    private static final String CRON_CMD = "busybox sed -i \"/doCron/ c doCron=%s\" /system/etc/init.d/99mods";
+    private static final String ZIP_CMD = "busybox sed -i \"/doZip/ c doZip=%s\" /system/etc/init.d/99mods";
     private static final String RM_SCRIPT = "rm -f /system/etc/init.d/99%s";
     private static final String CRON_BOOT = "echo \"root:x:0:0::data/cron:/system/xbin/bash\" > /system/etc/passwd";
     private static final String KILL_CRON_BOOT = "busybox sed -i \"/%s/D\" /system/etc/passwd";
@@ -53,7 +53,7 @@ public final class Bin {
     }
 
     public static boolean runRootCommand(String command) {
-        Log.d(TAG, "Attempting to runRootCommand: " + command);
+        Log.d(TAG, String.format("Attempting to runRootCommand { %s }", command));
         Process process = null;
         DataOutputStream os = null;
         try {
@@ -110,24 +110,18 @@ public final class Bin {
             Bin.runRootCommand(Constants.DONT_REBOOT);
             Log.d(TAG, String.format("installing %s script", mod));
             if (mod.equals("sysctl")) {
-                Bin.runRootCommand(String.format(SYSCTL_CMD, key));
-                return Bin.runRootCommand("99mods");
+                return Bin.runRootCommand(String.format(SYSCTL_CMD, key));
             } else if (mod.equals("cron")) {
-                Bin.runRootCommand(String.format(CRON_CMD, key));
-                return Bin.runRootCommand("99mods");
+                return Bin.runRootCommand(String.format(CRON_CMD, key));
             } else if (mod.equals("zip")) {
-                Bin.runRootCommand(String.format(ZIP_CMD, key));
-                return Bin.runRootCommand("99mods");
+                return Bin.runRootCommand(String.format(ZIP_CMD, key));
             } else if (mod.equals("logger")) {
-                Bin.runRootCommand(String.format(LOGGER_CMD, key));
-                return Bin.runRootCommand("99mods");
+                return Bin.runRootCommand(String.format(LOGGER_CMD, key));
             } else if (mod.equals("oc")) {
-                Bin.runRootCommand(String.format(CP_OC_SCRIPT, key));
-                return Bin.runRootCommand("99oc");
+                return Bin.runRootCommand(String.format(CP_OC_SCRIPT, key));
             }
             return false;
         } finally {
-            Bin.runRootCommand(Constants.REVERT_DONT_REBOOT);
             Bin.mount("ro");
         }
     }

@@ -7,6 +7,7 @@
     <string name="general_title">JBitesGUI v1</string>
     <string name="main_title_head">JBitesGUI by n00bware</string>
     <string name="install_button">Click to install JakebitesMods v12</string>
+    <string name="reboot">Reboot now</string>
 
     <!-- Status of downloads -->
     <string name="status_title">Status of downloads</string>

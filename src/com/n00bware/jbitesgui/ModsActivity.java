@@ -7,6 +7,8 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemProperties;
 import android.preference.CheckBoxPreference;
@@ -18,6 +20,8 @@ import android.preference.PreferenceScreen;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.text.InputFilter;
 import android.text.InputFilter.LengthFilter;
@@ -42,6 +46,15 @@ public class ModsActivity extends PreferenceActivity implements
     private static final String OC_PREF = "oc_pref";
     private static final String ZIP_PREF = "zip_pref";
     private static final String LOG_PREF = "log_pref";
+
+    private static final String GITHUB = "https://github.com/n00bware/android_apps_JBitesGUI";
+    private static final String DONATE_jbirdvegas = "http://bit.ly/oCWMo0";
+    private static final String DONATE_jakebites = "http://bit.ly/oFbswu";
+
+    private final int MENU_DONATE_jbirdvegas = 1;
+    private final int MENU_DONATE_jakebites = 2;
+    private final int REBOOT = 3;
+    private final int MENU_CODE = 4;
 
     //TAG is used for debugging in logcat
     private static final String TAG = "JBitesGUI";
@@ -166,8 +179,44 @@ public class ModsActivity extends PreferenceActivity implements
             } else if (pref == mZipPref) {
                 value = mZipPref.isChecked();
                 return Bin.modScripts("zip", String.valueOf(value ? "1" : "0"));
+            } else if (pref == mSysctlPref) {
+                value = mSysctlPref.isChecked();
+                return Bin.modScripts("sysctl", String.valueOf(value ? "1" : "0"));
+            } else if (pref == mLogPref) {
+                value = mLogPref.isChecked();
+                return Bin.modScripts("logger", String.valueOf(value ? "1" : "0"));
             }
         } finally {}
     return false;
+    }
+
+    private boolean website(String web) {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(web));
+        startActivity(browserIntent);
+        return true;
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu){
+        boolean result = super.onCreateOptionsMenu(menu);
+        menu.add(0, MENU_DONATE_jbirdvegas, 0, "Donate to JBirdVegas").setIcon(R.drawable.paypal);
+        menu.add(0, MENU_DONATE_jakebites, 0, "Donate to Jakebites").setIcon(R.drawable.paypal);
+        menu.add(0, MENU_CODE, 0, "Show me the code").setIcon(R.drawable.github);
+        menu.add(0, REBOOT, 0, "Reboot").setIcon(R.drawable.reboot);
+        return result;
+    }
+ 
+    /* Handle the menu selection */
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case MENU_DONATE_jbirdvegas:
+            return website(DONATE_jbirdvegas);
+        case MENU_DONATE_jakebites:
+            return website(DONATE_jakebites);
+        case MENU_CODE:
+            return website(GITHUB);
+        case REBOOT:
+            return Bin.runRootCommand("reboot");
+        }
+        return false;
     }
 }

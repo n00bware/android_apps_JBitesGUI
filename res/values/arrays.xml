@@ -42,11 +42,11 @@
     </string-array>
 
     <string-array name="entries_oc">
-        <item>1000</item>
-        <item>1100</item>
-        <item>1200</item>
-        <item>1250</item>
-        <item>1300</item>
+        <item>1000mhz</item>
+        <item>1100mhz</item>
+        <item>1200mhz</item>
+        <item>1250mhz</item>
+        <item>1300mhz</item>
         <item>disableOC</item>
     </string-array>
 
