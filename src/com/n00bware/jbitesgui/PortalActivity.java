@@ -77,7 +77,6 @@ public class PortalActivity extends Activity {
                     builder.setMessage(e.getMessage());
                     e.printStackTrace();
                 }
-
                 builder.create().show();
             }
         });
@@ -89,6 +88,16 @@ public class PortalActivity extends Activity {
                 Bin.runRootCommand("reboot");
             }
         });
+
+        Button mods = (Button)findViewById(R.id.mods);
+        mods.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            Intent intent = new Intent(PortalActivity.this,ModsActivity.class);
+            startActivity(intent);
+            }
+        });
+
     }
 
     final static String ZIP_FILTER = "assets";

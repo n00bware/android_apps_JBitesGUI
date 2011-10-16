@@ -42,10 +42,11 @@ public class ShowBuildProp extends AlertActivity {
 
         Reader reader = null;
         StringBuilder data = null;
-        Bin.mount("rw");
+
 
         Bin.updateShowBuild();
         try {
+            Bin.mount("rw");
             data = new StringBuilder(2048);
             char tmp[] = new char[2048];
             int numRead;
@@ -65,6 +66,7 @@ public class ShowBuildProp extends AlertActivity {
             } catch (IOException e) {
                 Log.e(TAG, "IOException while closing reader:", e);
             }
+            Bin.mount("ro");
         }
 
         if (TextUtils.isEmpty(data)) {

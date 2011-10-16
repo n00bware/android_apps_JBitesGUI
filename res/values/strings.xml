@@ -8,10 +8,7 @@
     <string name="main_title_head">JBitesGUI by n00bware</string>
     <string name="install_button">Click to install JakebitesMods v12</string>
     <string name="reboot">Reboot now</string>
-
-    <!-- Status of downloads -->
-    <string name="status_title">Status of downloads</string>
-    <string name="status"> </string>
+    <string name="mods">Take me to the mods GUI</string>
 
     <!-- ShowBuildProp.java strings -->
     <string name="showbuild_title">Do you know what is in your build.prop</string>
@@ -47,7 +44,7 @@
 
     <!-- OPEN SOURCE Dialoge -->
     <string name="explain_wait_title">ROOT IS REQUIRED</string>
-    <string name="explain_wait_summary">This is the Open Source GUI to JakebitesMods (github.com/n00bware/JBitesGUI) we have started installing JakebitesMods ...this will take a second please be patient</string>
+    <string name="explain_wait_summary">This is the Open Source GUI to JakebitesMods (github.com/n00bware/android_apps_JBitesGUI)</string>
 
     <!-- zipalign apps -->
     <string name="pref_zip_title">ZipAlign</string>
@@ -58,11 +55,6 @@
     <string name="pref_log_title">LogCat</string>
     <string name="pref_log_summaryOn">Disable logcat on boot</string>
     <string name="pref_log_summaryOff">Enable logcat on boot</string>
-
-    <!-- all mods -->
-    <string name="pref_all_title">All In One</string>
-    <string name="pref_all_summaryOn">Uninstall JakebitesMods</string>
-    <string name="pref_all_summaryOff">Install JakebitesMods</string>
 
 <!-- string template
 

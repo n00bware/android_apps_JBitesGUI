@@ -20,4 +20,12 @@
         android:layout_gravity="center_horizontal"
         android:textSize="20sp">
     </Button>
+
+    <Button android:background="@drawable/mods"
+        android:id="@+id/mods"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textSize="20sp">
+    </Button>
 </LinearLayout>
