@@ -99,28 +99,38 @@ public final class Bin {
             return Bin.runRootCommand(String.format(REMOUNT_CMD, "rw"));
         } else if (key.equals("ro")) {
             return Bin.runRootCommand(String.format(REMOUNT_CMD, "ro"));
+        } else {
+            Log.d(TAG, String.format("Hold your horses this method only allows rw/ro not %s", key));
+            return false;
         }
-        return false;
     }
 
     public static boolean modScripts(String mod, String key) {
         Log.d(TAG, String.format("modScripts called: {%s} {%s}", mod, key));
+        if (!Bin.mount("rw")) {
+            throw new RuntimeException("Could not remount /system rw");
+        }
+        boolean success = false;
         try {
-            Bin.mount("rw");
             Bin.runRootCommand(Constants.DONT_REBOOT);
             Log.d(TAG, String.format("installing %s script", mod));
             if (mod.equals("sysctl")) {
-                return Bin.runRootCommand(String.format(SYSCTL_CMD, key));
+                success = Bin.runRootCommand(String.format(SYSCTL_CMD, key));
+                return success;
             } else if (mod.equals("cron")) {
-                return Bin.runRootCommand(String.format(CRON_CMD, key));
+                success = Bin.runRootCommand(String.format(CRON_CMD, key));
+                return success;
             } else if (mod.equals("zip")) {
-                return Bin.runRootCommand(String.format(ZIP_CMD, key));
+                success = Bin.runRootCommand(String.format(ZIP_CMD, key));
+                return success;
             } else if (mod.equals("logger")) {
-                return Bin.runRootCommand(String.format(LOGGER_CMD, key));
+                success = Bin.runRootCommand(String.format(LOGGER_CMD, key));
+                return success;
             } else if (mod.equals("oc")) {
-                return Bin.runRootCommand(String.format(CP_OC_SCRIPT, key));
+                success = Bin.runRootCommand(String.format(CP_OC_SCRIPT, key));
+                return success;
             }
-            return false;
+            return success;
         } finally {
             Bin.mount("ro");
         }

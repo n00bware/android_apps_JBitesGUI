@@ -126,8 +126,10 @@ public class PortalActivity extends Activity {
                 copyStreams(zip.getInputStream(entry), fos);
                 Runtime.getRuntime().exec("chmod 755 " + outputFile.getAbsolutePath());
             }
-        } catch (IOException e) {
-            Log.e(TAG, "Error: " + e.getMessage());
+        } catch (IOException ioe) {
+            Log.e(TAG, "Error: " + ioe.getMessage());
+        } catch (NullPointerException ne) {
+            Log.e(TAG, "NullPointerException: " + ne.getMessage());
         }
     }
 
