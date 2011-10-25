@@ -27,6 +27,116 @@ doGovx=1
 
 # Functions
 
+debounceMods()
+{
+	bounce=$1
+	echo
+	echo
+	echo -n "This will install, activate and set the ${bounce} debounce mod at boot. Would you like to continue? (y/n) : "
+	read goDebounce
+	case $goDebounce in
+		y|Y)
+			busybox mount -o remount,rw /system
+			busybox cp -f /data/debounce/${bounce}/debounce.ko /system/lib/modules/
+			busybox chmod 755 /system/lib/modules/debounce.ko
+			rmmod debounce
+			sleep 1
+			insmod /system/lib/modules/debounce.ko
+			echo
+			echo
+			echo -n "The ${bounce} debounce mod has been activated and set at boot, press enter to continue to the debounce menu: "
+			read anyKeydebounce
+			case $anyKeydebounce in
+				*)
+					debounceMenu
+				;;
+			esac
+		;;
+		n|N)
+			echo
+			echo
+			echo -n "The ${bounce} debounce mod was NOT installed. Press enter to continue to the debounce menu: "
+			read anyKeydebounce
+			case $anyKeydebounce in
+				*)
+					debounceMenu
+				;;
+			esac
+		;;
+	esac
+}
+
+enabledDebounce()
+{
+	if busybox [ -n "$( busybox grep doDebounce=1 /system/etc/init.d/99mods )" ]; then
+	echo -n "Debounce tweaks are currently running, would you like to turn them off? (y/n) : "
+		read debounceonMod
+		case $debounceonMod in
+			y|Y)
+				busybox mount -o remount,rw /system
+				busybox sed -i 's|doDebounce=.*|doDebounce=0|' /system/etc/init.d/99mods
+				echo
+				echo
+				echo "Debounce tweaks disabled."
+				echo -n "You must reboot for the changes to take effect, reboot now? (y/n) : "
+				read rebootNow
+				case $rebootNow in
+					y|Y)
+						reboot
+					;;
+				esac
+				echo
+				echo
+			;;
+			n|N)
+				echo
+				echo
+				echo -n "Debounce tweaks remain enabled, press enter to continue: "
+				read anyKeymenu
+				case $anyKeymenu in
+					*)
+					;;
+				esac
+				echo
+				echo
+			;;
+		esac
+	else
+	echo -n "Debounce tweaks are currently not running, would you like to turn them on? (y/n) : "
+		read debounceoffMod
+		case $debounceoffMod in
+			y|Y)
+				busybox mount -o remount,rw /system
+				busybox sed -i 's|doDebounce=.*|doDebounce=1|' /system/etc/init.d/99mods
+				echo
+				echo
+				echo "Debounce tweaks enabled."
+				echo -n "You must reboot for the changes to take effect, reboot now? (y/n) : "
+				read rebootNow
+				case $rebootNow in
+					y|Y)
+						reboot
+					;;
+				esac
+				echo
+				echo
+			;;
+			n|N)
+				echo
+				echo
+				echo -n "Debounce tweaks remain disabled, press enter to continue: "
+				read anyKeymenu
+				case $anyKeymenu in
+					*)
+					;;
+				esac
+				echo
+				echo
+			;;
+		esac
+	fi
+}
+
 sysctlMods()
 {
 	if busybox [ -n "$( busybox grep doSysctl=1 /system/etc/init.d/99mods )" ]; then
@@ -1034,6 +1144,25 @@ checkSystem()
 	fi	
 }
 
+checkDebounce()
+{
+	if [ -e /sys/module/debounce ]; then
+	echo "Currently your debounce value is:"
+	cat /sys/module/debounce/parameters/debounce_delay
+	echo "ms"
+	sleep 1
+		if busybox [ $1 ]; then
+		checkMenu
+		fi
+	else
+	echo "Debounce mod not currently running."
+	sleep 1
+		if busybox [ $1 ]; then
+		checkMenu
+		fi
+	fi
+}
+
 checkAll()
 {
 	checkInit
@@ -1044,7 +1173,9 @@ checkAll()
 	checkRecovery
 	checkSdcard
 	checkSystem
+	checkDebounce
 	checkCpu
+
 }
 
 
@@ -1269,9 +1400,10 @@ doInit()
 			echo "| 6) Check recovery at boot                 |"
 			echo "| 7) Check sdcard speed up at boot          |"
 			echo "| 8) Check system speed up at boot          |"
-			echo "| 9) Check to see if init is working        |"
-			echo "| 10) Check CPU info                        |"
-			echo "| 11) Go back to the main menu              |"
+			echo "| 9) Check debounce mod                     |"
+			echo "| 10) Check to see if init is working       |"
+			echo "| 11) Check CPU info                        |"
+			echo "| 12) Go back to the main menu              |"
 			echo "============================================="
 			echo -n "What would you like to check?"
 			read checkmodsMenu
@@ -1284,11 +1416,57 @@ doInit()
 				6) checkRecovery 1							;;
 				7) checkSdcard 1							;;
 				8) checkSystem 1							;;
-				9) checkInit								;;
-				10) checkCpu								;;
+				9) checkDebounce 1							;;
+				10) checkInit								;;
+				11) checkCpu								;;
 			esac
 		}
 		
+# Debounce Menu
+
+		debounceMenu()
+		{
+			echo "============================================="
+			echo "|  Choose your debounce value of peference. |"
+			echo "|                                           |"
+			echo "| 1) 5 ms (Stock with my mods)              |"
+			echo "| 2) 10 ms                                  |"
+			echo "| 3) 15 ms                                  |"
+			echo "| 4) 20 ms                                  |"
+			echo "| 5) Disable debounce mods                  |"
+			echo "| 6) Check debounce value                   |"
+			echo "| 7) Go back to the main menu               |"
+			echo "============================================="
+			echo
+			echo "Currently your debounce value is:"
+			if [ -e /sys/module/debounce ]; then
+			cat /sys/module/debounce/parameters/debounce_delay
+			echo "ms"
+			echo -n "Please choose which debounce value you would like."
+			read debounceSet
+			case $debounceSet in
+				1) debounceMods 5ms							;;
+				2) debounceMods 10ms						;;
+				3) debounceMods 15ms						;;
+				4) debounceMods 20ms						;;
+				5) disableDebounce							;;
+				6) checkDebounce							;;
+			esac
+			else
+			echo "No debounce mod set"
+			echo -n "Please choose which debounce value you would like."
+			read debounceSet
+			case $debounceSet in
+				1) debounceMods 5ms							;;
+				2) debounceMods 10ms						;;
+				3) debounceMods 15ms						;;
+				4) debounceMods 20ms						;;
+				5) disableDebounce							;;
+				6) checkDebounce							;;
+			esac
+			fi
+		}
+
 
 # Gov Menu
 
@@ -1395,6 +1573,7 @@ doInit()
 
 
 
+
 # Mod Central main menu
 
 exitLoop=0
@@ -1413,15 +1592,16 @@ echo "| 5) Logger Mod                             |"
 echo "| 6) Overclock/Undervolt Mods               |"
 echo "| 7) Sdcard Speed Up Mods                   |"
 echo "| 8) System Speed Up Mods                   |"
-echo "| 9) V6 Supercharger Mods by zeppelinrox    |"
-echo "| 10) Check Mods                            |"
-echo "| 11) Enable recovery on each reboot        |"
-echo "| 12) Enable init for ROMS without          |"
-echo "| 13) Disable/re-enable all mods            |"
-echo "| 14) Softboot                              |"
-echo "| 15) Reboot                                |"
-echo "| 16) Donate/Show your support! :)          |"
-echo "| 17) Exit ModCentral                       |"
+echo "| 9) Debounce Mod                           |"
+echo "| 10) V6 Supercharger Mods by zeppelinrox   |"
+echo "| 11) Check Mods                            |"
+echo "| 12) Enable recovery on each reboot        |"
+echo "| 13) Enable init for ROMS without          |"
+echo "| 14) Disable/re-enable all mods            |"
+echo "| 15) Softboot                              |"
+echo "| 16) Reboot                                |"
+echo "| 17) Donate/Show your support! :)          |"
+echo "| 18) Exit ModCentral                       |"
 echo "|                                           |"
 echo "============================================="
 echo -n "Please choose what you would like to do."
@@ -1435,14 +1615,15 @@ case $mainChoice in
 	6) undervoltMenu				;;
 	7) sdcardMods					;;
 	8) systemupMods					;;
-	9) doSupercharge 				;;
-	10) checkMenu					;;
-	11) bootRecovery				;;
-	12) doInit						;;
-	13) disableMods					;;
-	14) doSoftboot					;;
-	15) reboot						;;
-	16) doDonate					;;
-	17) exit						;;
+	9) enabledDebounce				;;
+	10) doSupercharge 				;;
+	11) checkMenu					;;
+	12) bootRecovery				;;
+	13) doInit						;;
+	14) disableMods					;;
+	15) doSoftboot					;;
+	16) reboot						;;
+	17) doDonate					;;
+	18) exit						;;
 esac
 done

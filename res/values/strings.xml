@@ -4,9 +4,10 @@
 
     <!-- JBitesGUI app strings -->
     <string name="app_name">JBitesGUI</string>
-    <string name="general_title">JBitesGUI v1</string>
+    <string name="general_title">JBitesGUI v13.2.2</string>
     <string name="main_title_head">JBitesGUI by n00bware</string>
-    <string name="install_button">Click to install JakebitesMods v12</string>
+    <string name="versionName">Mods v13 GUI v2.2</string>
+    <string name="install_button">Click to install JakebitesMods v13</string>
     <string name="reboot">Reboot now</string>
     <string name="mods">Take me to the mods GUI</string>
 

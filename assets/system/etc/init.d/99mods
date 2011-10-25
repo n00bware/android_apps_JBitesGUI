@@ -2,7 +2,7 @@
 
 # Variables
 doOnboot=0
-doLoop=1
+doLoop=0
 doBuild=1
 doCron=1
 doLogger=0
@@ -10,6 +10,7 @@ doSysctl=1
 doZip=1
 doSdcard=1
 doSystem=1
+doDebounce=1
 
 busybox mount -o remount,rw /system
 
@@ -18,6 +19,10 @@ insmod /system/lib/modules/cpufreq_conservative.ko
 insmod /system/lib/modules/cpufreq_smartass.ko
 insmod /system/lib/modules/symsearch.ko
 
+# debounce mod
+if busybox [ $doDebounce -eq 1 ]; then
+insmod /system/lib/modules/debounce.ko
+fi
 
 # file system speedups
 if busybox [ $doSystem -eq 1 ]; then
@@ -44,7 +49,7 @@ busybox sed -i 's|mot.proximity.delay=.*|mot.proximity.delay=100|' /system/build
 busybox sed -i 's|ro.telephony.call_ring.delay=.*|ro.telephony.call_ring.delay=750|' /system/build.prop
 
 CURRENT_VALUE=` busybox grep ro.build.display.id /system/build.prop | busybox cut -d '=' -f2 `
-NEW_VALUE="${CURRENT_VALUE}+JBMv12"
+NEW_VALUE="${CURRENT_VALUE}+JBMv13"
 
 busybox sed -i "s|ro.build.display.id=.*|ro.build.display.id=${NEW_VALUE}|" /system/build.prop
 fi

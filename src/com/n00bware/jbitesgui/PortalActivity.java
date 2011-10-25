@@ -16,6 +16,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Intent;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,6 +38,7 @@ public class PortalActivity extends Activity {
     private static final String GITHUB = "https://github.com/n00bware/android_apps_JBitesGUI";
     private static final String DONATE_jbirdvegas = "http://bit.ly/oCWMo0";
     private static final String DONATE_jakebites = "http://bit.ly/oFbswu";
+
 
     /** Called when the activity is first created. */
     @Override
@@ -61,6 +63,7 @@ public class PortalActivity extends Activity {
 
                 AlertDialog.Builder builder = new Builder(PortalActivity.this);
                 builder.setPositiveButton(android.R.string.ok, null);
+                builder.setTitle("JBitesGUI");
 
                 try {
                     Bin.mount("rw");
@@ -68,7 +71,7 @@ public class PortalActivity extends Activity {
                     //Bin.runRootCommand(Constants.SYMLINK_BUSYBOX);
                     Bin.runRootCommand(Constants.SYMLINK_QUERTY);
                     Bin.runRootCommand(Constants.SYMLINK_TOOLBOX);
-                    builder.setMessage("JBitesGUI successfully installed JakebitesMods v12  ...enjoy!");
+                    builder.setMessage("...successfully installed JakebitesMods v12");
                     Bin.mount("ro");
                 }
 
