@@ -5,13 +5,6 @@
     <PreferenceCategory android:key="general_category"
         android:title="@string/general_title">
 
-        <PreferenceScreen android:key="showbuild" 
-            android:title="@string/showbuild_title" android:summary="@string/showbuild_label">
-            <intent android:action="android.intent.action.MAIN"
-                android:targetPackage="com.n00bware.jbitesgui"
-                android:targetClass="com.n00bware.jbitesgui.ShowBuildProp" />
-        </PreferenceScreen>
-
         <ListPreference android:key="mount_pref"
             android:dialogTitle="@string/pref_mount_title"
             android:title="@string/pref_mount_title" android:summary="@string/pref_mount_summary"
