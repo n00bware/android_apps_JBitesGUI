@@ -34,10 +34,12 @@ public class PortalActivity extends Activity {
     private final int MENU_DONATE_jakebites = 2;
     private final int PREF = 3;
     private final int MENU_CODE = 4;
+    private final int N00BWARE = 5;
 
     private static final String GITHUB = "https://github.com/n00bware/android_apps_JBitesGUI";
     private static final String DONATE_jbirdvegas = "http://bit.ly/oCWMo0";
     private static final String DONATE_jakebites = "http://bit.ly/oFbswu";
+    private static final String MARKET_n00bware = "market://search?q=n00bware";
 
 
     /** Called when the activity is first created. */
@@ -68,10 +70,9 @@ public class PortalActivity extends Activity {
                 try {
                     Bin.mount("rw");
                     Bin.runRootCommand(toBash.toString());
-                    //Bin.runRootCommand(Constants.SYMLINK_BUSYBOX);
                     Bin.runRootCommand(Constants.SYMLINK_QUERTY);
                     Bin.runRootCommand(Constants.SYMLINK_TOOLBOX);
-                    builder.setMessage("...successfully installed JakebitesMods v12");
+                    builder.setMessage(R.string.success_notify);
                     Bin.mount("ro");
                 }
 
@@ -185,6 +186,7 @@ public class PortalActivity extends Activity {
         menu.add(0, MENU_DONATE_jakebites, 0, "Donate to Jakebites").setIcon(R.drawable.paypal);
         menu.add(0, MENU_CODE, 0, "Show me the code").setIcon(R.drawable.github);
         menu.add(0, PREF, 0, "Mods").setIcon(R.drawable.mods);
+        menu.add(0, N00BWARE, 0, "n00bware on the Market").setIcon(R.drawable.market);
         return result;
     }
  
@@ -201,6 +203,8 @@ public class PortalActivity extends Activity {
             Intent intent = new Intent(PortalActivity.this,ModsActivity.class);
             startActivity(intent);
             return true;
+        case N00BWARE:
+            return website(MARKET_n00bware);
         }
         return false;
     }

@@ -38,11 +38,10 @@ public final class Bin {
     private static final String LOGGER_CMD = "busybox sed -i \"/doLogger/ c doLogger=%s\" /system/etc/init.d/99mods";
     private static final String CRON_CMD = "busybox sed -i \"/doCron/ c doCron=%s\" /system/etc/init.d/99mods";
     private static final String ZIP_CMD = "busybox sed -i \"/doZip/ c doZip=%s\" /system/etc/init.d/99mods";
+    private static final String ON_OFF_DEBOUNCE_CMD = "busybox sed -i \"/doDebounce/ c doDebounce=%s\" /system/etc/init.d/99mods";
     private static final String RM_SCRIPT = "rm -f /system/etc/init.d/99%s";
     private static final String CRON_BOOT = "echo \"root:x:0:0::data/cron:/system/xbin/bash\" > /system/etc/passwd";
     private static final String KILL_CRON_BOOT = "busybox sed -i \"/%s/D\" /system/etc/passwd";
-    private static final String INSTALL_OC = "cp /data/apps/com.n00bware.jbitesgui/assets/system/lib/modules/overclock.ko /system/lib/modules/overclock.ko";
-    private static final String INSTALL_GOV = "cp /data/apps/com.n00bware.jbitesgui/assets/system/lib/modules/cpufreq_interactive.ko /system/lib/modules/cpufreq_interactive.ko";
     private static final String KILL_MODULES = "rm -f /system/lib/modules/%s";
     private static final String MODS_PATH = "/sdcard/mods/99%s";
     private static final String MODULE_PATH = "/sdcard/mods/%s";
@@ -128,6 +127,9 @@ public final class Bin {
                 return success;
             } else if (mod.equals("oc")) {
                 success = Bin.runRootCommand(String.format(CP_OC_SCRIPT, key));
+                return success;
+            } else if (mod.equals("debounce")) {
+                success = Bin.runRootCommand(String.format(ON_OFF_DEBOUNCE_CMD, key));
                 return success;
             }
             return success;

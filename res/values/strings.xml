@@ -10,6 +10,7 @@
     <string name="install_button">Click to install JakebitesMods v13</string>
     <string name="reboot">Reboot now</string>
     <string name="mods">Take me to the mods GUI</string>
+    <string name="success_notify">...we have successfully installed JakebitesMods v13!</string>
 
     <!-- Mount System -->
     <string name="pref_mount_title">Mount System</string>
@@ -47,6 +48,11 @@
     <string name="pref_log_title">LogCat</string>
     <string name="pref_log_summaryOn">Disable logcat on boot</string>
     <string name="pref_log_summaryOff">Enable logcat on boot</string>
+
+    <!-- debounce values -->
+    <string name="pref_onOff_debounce_title">Enable/Disable Debounce</string>
+    <string name="pref_debounce_title">Debounce</string>
+    <string name="pref_debounce_summary">settings for debounce</string>
 
 <!-- string template
 

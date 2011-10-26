@@ -38,6 +38,7 @@ public class ModsActivity extends PreferenceActivity implements
     private static final String APPEND_CMD = "echo \"%s=%s\" >> /system/build.prop";
     private static final String KILL_PROP_CMD = "busybox sed -i \"/%s/D\" /system/build.prop";
     private static final String REPLACE_CMD = "busybox sed -i \"/%s/ c %<s=%s\" /system/build.prop";
+    private static final String DEBOUNCE_CMD = "cp -f /data/debounce/%s/debounce.ko /system/lib/modules/debounce.ko";
     private static final String SHOWBUILD_PATH = "/system/tmp/showbuild";
     private static final String DISABLE = "disable";
     private static final String MOUNT_PREF = "mount_pref";
@@ -46,6 +47,8 @@ public class ModsActivity extends PreferenceActivity implements
     private static final String OC_PREF = "oc_pref";
     private static final String ZIP_PREF = "zip_pref";
     private static final String LOG_PREF = "log_pref";
+    private static final String DEBOUNCE_PREF = "debounce_pref";
+    private static final String ON_OFF_DEBOUNCE = "onOff_debounce";
 
     private static final String GITHUB = "https://github.com/n00bware/android_apps_JBitesGUI";
     private static final String DONATE_jbirdvegas = "http://bit.ly/oCWMo0";
@@ -68,6 +71,8 @@ public class ModsActivity extends PreferenceActivity implements
     private ListPreference mOCPref;
     private CheckBoxPreference mZipPref;
     private CheckBoxPreference mLogPref;
+    private CheckBoxPreference mOnOffDebouncePref;
+    private ListPreference mDebouncePref;
     private AlertDialog mAlertDialog;
     private Context mMainContext;
 
@@ -133,6 +138,11 @@ public class ModsActivity extends PreferenceActivity implements
         boolean log_exists = logfile.exists();
         mLogPref.setChecked(log_exists);
 
+        mDebouncePref = (ListPreference) prefSet.findPreference(DEBOUNCE_PREF);
+        mDebouncePref.setOnPreferenceChangeListener(this);
+
+        mOnOffDebouncePref = (CheckBoxPreference) prefSet.findPreference(ON_OFF_DEBOUNCE);
+
         /*
          * Mount /system RW and determine if /system/tmp exists; if it doesn't
          * we make it
@@ -160,6 +170,8 @@ public class ModsActivity extends PreferenceActivity implements
                     return Bin.mount(newValue.toString());
                 } else if (pref == mOCPref) {
                     return Bin.modScripts("oc", newValue.toString());
+                } else if (pref == mDebouncePref) {
+                    return Bin.runRootCommand(String.format(DEBOUNCE_CMD, newValue.toString()));
                 }
             } finally {
                 Bin.mount("ro");
@@ -172,21 +184,22 @@ public class ModsActivity extends PreferenceActivity implements
     public boolean onPreferenceTreeClick(PreferenceScreen ps, Preference pref) {
         boolean value;
         Log.d(TAG, "you chose " + pref);
-        try {
-            if (pref == mCronPref) {
-                value = mCronPref.isChecked();
-                return Bin.modScripts("cron", String.valueOf(value ? "1" : "0"));
-            } else if (pref == mZipPref) {
-                value = mZipPref.isChecked();
-                return Bin.modScripts("zip", String.valueOf(value ? "1" : "0"));
-            } else if (pref == mSysctlPref) {
-                value = mSysctlPref.isChecked();
-                return Bin.modScripts("sysctl", String.valueOf(value ? "1" : "0"));
-            } else if (pref == mLogPref) {
-                value = mLogPref.isChecked();
-                return Bin.modScripts("logger", String.valueOf(value ? "1" : "0"));
-            }
-        } finally {}
+        if (pref == mCronPref) {
+            value = mCronPref.isChecked();
+            return Bin.modScripts("cron", String.valueOf(value ? "1" : "0"));
+        } else if (pref == mZipPref) {
+            value = mZipPref.isChecked();
+            return Bin.modScripts("zip", String.valueOf(value ? "1" : "0"));
+        } else if (pref == mSysctlPref) {
+            value = mSysctlPref.isChecked();
+            return Bin.modScripts("sysctl", String.valueOf(value ? "1" : "0"));
+        } else if (pref == mLogPref) {
+            value = mLogPref.isChecked();
+            return Bin.modScripts("logger", String.valueOf(value ? "1" : "0"));
+        } else if (pref == mOnOffDebouncePref) {
+            value = mOnOffDebouncePref.isChecked();
+            return Bin.modScripts("debounce", String.valueOf(value ? "1" : "0"));
+        }
     return false;
     }
 

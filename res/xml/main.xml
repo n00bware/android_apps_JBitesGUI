@@ -37,5 +37,15 @@
             android:summaryOn="@string/pref_log_summaryOn"
             android:summaryOff="@string/pref_log_summaryOff" />
 
+        <CheckBoxPreference android:key="onOff_debounce"
+            android:title="@string/pref_onOff_debounce_title" />
+
+        <ListPreference android:key="debounce_pref"
+            android:dependency="onOff_debounce"
+            android:dialogTitle="@string/pref_debounce_title"
+            android:title="@string/pref_debounce_title" android:summary="@string/pref_debounce_summary"
+            android:entries="@array/entries_debounce_explain"
+            android:entryValues="@array/entries_debounce" />
+
     </PreferenceCategory>
 </PreferenceScreen>
