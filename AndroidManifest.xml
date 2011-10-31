@@ -3,7 +3,7 @@
       package="com.n00bware.jbitesgui"
       android:versionCode="1322"
       android:versionName="@string/versionName">
-    <uses-sdk android:minSdkVersion="4"></uses-sdk>
+    <uses-sdk android:minSdkVersion="10"></uses-sdk>
 
     <application android:icon="@drawable/icon"
         android:label="@string/app_name">
