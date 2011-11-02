@@ -27,8 +27,28 @@ doGovx=1
 
 # Functions
 
-debounceMods()
+doTurbocharge()
 {
+	echo
+	echo
+	echo "This will take you to the 3G Turbocharger(v3 RC1) script by zeppelinrox."
+	echo
+	echo "I recommend option 1 and then run the wifi-fixer."
+	echo
+	echo -n "Would you like to continue? (y/n) : "
+	read turboCharge
+	case $turboCharge in
+		y|Y)
+			sh /system/xbin/3gcharge.sh
+		;;
+		n|N)
+			exit
+		;;
+	esac
+}
+
+debounceMods()
+{	
 	bounce=$1
 	echo
 	echo
@@ -84,7 +104,7 @@ enabledDebounce()
 					y|Y)
 						reboot
 					;;
-				esac
+				esac		
 				echo
 				echo
 			;;
@@ -99,7 +119,7 @@ enabledDebounce()
 				esac
 				echo
 				echo
-			;;
+			;;			
 		esac
 	else
 	echo -n "Debounce tweaks are currently not running, would you like to turn them on? (y/n) : "
@@ -132,7 +152,7 @@ enabledDebounce()
 				esac
 				echo
 				echo
-			;;
+			;;			
 		esac
 	fi
 }
@@ -643,11 +663,11 @@ zipMods()
 doSupercharge()
 {
 	echo
-	echo -n "This will take you to the V6 Supercharger(v8) script by zeppelinrox. Would you like to continue? (y/n) : "
+	echo -n "This will take you to the V6 Supercharger(v9 RC3.2) script by zeppelinrox. Would you like to continue? (y/n) : "
 	read superCharge
 	case $superCharge in
 		y|Y)
-			busybox1172 sh /system/xbin/v6supercharger8.sh
+			sh /system/xbin/v6superchargerv9.sh
 		;;
 		n|N)
 			exit
@@ -797,6 +817,7 @@ disableMods()
 			y|Y)
 				busybox mount -o remount,rw /system
 				busybox sed -i 's|doMods=.*|doMods=0|' /system/xbin/modcentral
+				busybox rm /system/etc/init.d/01recovery
 				busybox rm /system/etc/init.d/99mods
 				busybox rm /system/etc/init.d/99gov
 				busybox rm /system/etc/init.d/99oc
@@ -1160,7 +1181,7 @@ checkDebounce()
 		if busybox [ $1 ]; then
 		checkMenu
 		fi
-	fi
+	fi	
 }
 
 checkAll()
@@ -1466,7 +1487,7 @@ doInit()
 			esac
 			fi
 		}
-
+			
 
 # Gov Menu
 
@@ -1582,6 +1603,8 @@ echo "============================================="
 echo "|                                           |"
 echo "| Welcome to the Mod Central Main Menu!     |"
 echo "|                                           |"
+echo "|        By Jakebites aka Jboxen            |"
+echo "|                                           |"
 echo "============================================="
 echo "|                                           |"
 echo "| 1) Sysctl Mod                             |"
@@ -1594,14 +1617,15 @@ echo "| 7) Sdcard Speed Up Mods                   |"
 echo "| 8) System Speed Up Mods                   |"
 echo "| 9) Debounce Mod                           |"
 echo "| 10) V6 Supercharger Mods by zeppelinrox   |"
-echo "| 11) Check Mods                            |"
-echo "| 12) Enable recovery on each reboot        |"
-echo "| 13) Enable init for ROMS without          |"
-echo "| 14) Disable/re-enable all mods            |"
-echo "| 15) Softboot                              |"
-echo "| 16) Reboot                                |"
-echo "| 17) Donate/Show your support! :)          |"
-echo "| 18) Exit ModCentral                       |"
+echo "| 11) 3G Turbocharger Mods by zeppelinrox   |"
+echo "| 12) Check Mods                            |"
+echo "| 13) Enable recovery on each reboot        |"
+echo "| 14) Enable init for ROMS without          |"
+echo "| 15) Disable/re-enable all mods            |"
+echo "| 16) Softboot                              |"
+echo "| 17) Reboot                                |"
+echo "| 18) Donate/Show your support! :)          |"
+echo "| 19) Exit ModCentral                       |"
 echo "|                                           |"
 echo "============================================="
 echo -n "Please choose what you would like to do."
@@ -1617,13 +1641,14 @@ case $mainChoice in
 	8) systemupMods					;;
 	9) enabledDebounce				;;
 	10) doSupercharge 				;;
-	11) checkMenu					;;
-	12) bootRecovery				;;
-	13) doInit						;;
-	14) disableMods					;;
-	15) doSoftboot					;;
-	16) reboot						;;
-	17) doDonate					;;
-	18) exit						;;
+	11) doTurbocharge				;;
+	12) checkMenu					;;
+	13) bootRecovery				;;
+	14) doInit						;;
+	15) disableMods					;;
+	16) doSoftboot					;;
+	17) reboot						;;
+	18) doDonate					;;
+	19) exit						;;
 esac
 done

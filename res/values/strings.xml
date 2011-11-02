@@ -4,13 +4,13 @@
 
     <!-- JBitesGUI app strings -->
     <string name="app_name">JBitesGUI</string>
-    <string name="general_title">JBitesGUI v13.2.2</string>
+    <string name="general_title">JBitesGUI v14.3.0</string>
     <string name="main_title_head">JBitesGUI by n00bware</string>
-    <string name="versionName">Mods v13 GUI v2.2</string>
+    <string name="versionName">Mods v14 GUI v3.0</string>
     <string name="install_button">Click to install JakebitesMods v13</string>
     <string name="reboot">Reboot now</string>
     <string name="mods">Take me to the mods GUI</string>
-    <string name="success_notify">...we have successfully installed JakebitesMods v13!</string>
+    <string name="success_notify">...we have successfully installed JakebitesMods v14!</string>
 
     <!-- Mount System -->
     <string name="pref_mount_title">Mount System</string>

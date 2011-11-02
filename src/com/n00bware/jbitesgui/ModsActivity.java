@@ -35,11 +35,8 @@ import java.io.File;
 public class ModsActivity extends PreferenceActivity implements
         Preference.OnPreferenceChangeListener {
 
-    private static final String APPEND_CMD = "echo \"%s=%s\" >> /system/build.prop";
-    private static final String KILL_PROP_CMD = "busybox sed -i \"/%s/D\" /system/build.prop";
-    private static final String REPLACE_CMD = "busybox sed -i \"/%s/ c %<s=%s\" /system/build.prop";
     private static final String DEBOUNCE_CMD = "cp -f /data/debounce/%s/debounce.ko /system/lib/modules/debounce.ko";
-    private static final String SHOWBUILD_PATH = "/system/tmp/showbuild";
+    private static final String FIND_CMD = "grep -q \"%s\" /system/etc/init.d/99mods";
     private static final String DISABLE = "disable";
     private static final String MOUNT_PREF = "mount_pref";
     private static final String SYSCTL_PREF = "sysctl_pref";
@@ -115,51 +112,31 @@ public class ModsActivity extends PreferenceActivity implements
         mMountPref.setOnPreferenceChangeListener(this);
 
         mSysctlPref = (CheckBoxPreference) prefSet.findPreference(SYSCTL_PREF);
-        //look for the file if it exists the box is checked
-        File sysfile = new File("/system/etc/init.d/99sysctl");
-        boolean sys_exists = sysfile.exists();
+        boolean sys_exists = Bin.runRootCommand(String.format(FIND_CMD, "doSysctl=1"));
         mSysctlPref.setChecked(sys_exists);
 
         mCronPref = (CheckBoxPreference) prefSet.findPreference(CRON_PREF);
-        File cronfile = new File("/system/etc/init.d/99cron");
-        boolean cron_exists = cronfile.exists();
+        boolean cron_exists = Bin.runRootCommand(String.format(FIND_CMD, "doCron=1"));
         mCronPref.setChecked(cron_exists);
 
         mOCPref = (ListPreference) prefSet.findPreference(OC_PREF);
         mOCPref.setOnPreferenceChangeListener(this);
 
         mZipPref = (CheckBoxPreference) prefSet.findPreference(ZIP_PREF);
-        File zipfile = new File("/system/etc/init.d/99zip");
-        boolean zip_exists = zipfile.exists();
+        boolean zip_exists = Bin.runRootCommand(String.format(FIND_CMD, "doZip=1"));
         mZipPref.setChecked(zip_exists);
 
         mLogPref = (CheckBoxPreference) prefSet.findPreference(LOG_PREF);
-        File logfile = new File("/system/etc/init.d/99log");
-        boolean log_exists = logfile.exists();
+        boolean log_exists = Bin.runRootCommand(String.format(FIND_CMD, "doLogger=1"));
         mLogPref.setChecked(log_exists);
 
         mDebouncePref = (ListPreference) prefSet.findPreference(DEBOUNCE_PREF);
         mDebouncePref.setOnPreferenceChangeListener(this);
 
         mOnOffDebouncePref = (CheckBoxPreference) prefSet.findPreference(ON_OFF_DEBOUNCE);
-
-        /*
-         * Mount /system RW and determine if /system/tmp exists; if it doesn't
-         * we make it
-         */
-        File tmpDir = new File("/system/tmp");
-        boolean exists = tmpDir.exists();
-        if (!exists) {
-            try {
-                Log.d(TAG, "We need to make /system/tmp dir");
-                Bin.mount("rw");
-                Bin.runRootCommand("mkdir /system/tmp");
-            } finally {
-                Bin.mount("ro");
-            }
-        }
+        boolean debounce_exists = Bin.runRootCommand(String.format(FIND_CMD, "doDebounce=1"));
+        mOnOffDebouncePref.setChecked(debounce_exists);
     }
-
 
     public boolean onPreferenceChange(Preference pref, Object newValue) {
         if (newValue != null) {
