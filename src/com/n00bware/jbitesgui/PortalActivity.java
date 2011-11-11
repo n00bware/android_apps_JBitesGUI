@@ -182,7 +182,7 @@ public class PortalActivity extends Activity {
 
     public boolean onCreateOptionsMenu(Menu menu){
         boolean result = super.onCreateOptionsMenu(menu);
-        menu.add(0, MENU_DONATE_jbirdvegas, 0, "Donate to JBirdVegas").setIcon(R.drawable.paypal);
+        menu.add(0, MENU_DONATE_jbirdvegas, 0, "Donate to JBirdVegas").setIcon(R.drawable.jbird_small);
         menu.add(0, MENU_DONATE_jakebites, 0, "Donate to Jakebites").setIcon(R.drawable.paypal);
         menu.add(0, MENU_CODE, 0, "Show me the code").setIcon(R.drawable.github);
         menu.add(0, PREF, 0, "Mods").setIcon(R.drawable.mods);
